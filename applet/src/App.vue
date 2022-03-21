@@ -140,8 +140,7 @@ export default {
         .then(res => res.json())
         .then(
           d =>
-            (this.dates = d.map(d => {
-              d = d.calendar;
+            (this.dates = d.calendar.map(d => {
               const startDate = parseJSON(d.startDate);
               const endDate = parseJSON(d.startDate);
 
