@@ -75,7 +75,10 @@ import {
 } from "date-fns";
 import en from "date-fns/locale/en-US";
 
-const API_URL = "/calendar.json";
+const API_URL = mw
+  ? mw.config.values.wgScriptPath +
+    "/api.php?action=query&format=json&prop=&list=calendar"
+  : "/calendar.json";
 
 export default {
   data() {
