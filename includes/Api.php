@@ -42,4 +42,9 @@ class Api extends \ApiQueryBase {
 				=> 'apihelp-query+example-example-2',
 		];
 	}
+	
+
+	public function getCacheMode($params){
+		return "public";
+	}
 }
