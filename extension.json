@@ -40,7 +40,7 @@
     "ext.ICalCalendar": {
       "dependencies": ["vue", "mediawiki.api"],
       "es6": true,
-      "packageFiles": ["resources/calendar.umd.js"],
+      "packageFiles": ["calendar.umd.js"],
       "styles": ["style.css"]
     }
   },
