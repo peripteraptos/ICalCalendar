@@ -6235,8 +6235,7 @@ const _sfc_main = {
       this.currentMonth = startOfMonth(new Date());
     },
     fetchDates() {
-      fetch(API_URL).then((res) => res.json()).then((d) => this.dates = d.map((d2) => {
-        d2 = d2.calendar;
+      fetch(API_URL).then((res) => res.json()).then((d) => this.dates = d.calendar.map((d2) => {
         const startDate = parseJSON(d2.startDate);
         const endDate = parseJSON(d2.startDate);
         return __spreadProps(__spreadValues({}, d2), {
