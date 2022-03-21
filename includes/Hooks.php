@@ -1,5 +1,5 @@
 <?php
-namespace MediaWiki\Extension\Calendar;
+namespace MediaWiki\Extension\ICalCalendar;
 
 use Parser;
 use FormatJson;
@@ -10,7 +10,7 @@ class Hooks implements
  {
 
 	public function onBeforePageDisplay( $out, $skin ): void {
-		$out->addModules( 'ext.Calendar.vuecalendar' );
+		$out->addModules( 'ext.ICalCalendar' );
 	}
 
 

@@ -5,7 +5,7 @@
  * @file
  */
 
-namespace MediaWiki\Extension\Calendar;
+namespace MediaWiki\Extension\ICalCalendar;
 
 class SpecialCalendar extends \SpecialPage {
 
@@ -16,7 +16,7 @@ class SpecialCalendar extends \SpecialPage {
 		// A special page should at least have a name.
 		// We do this by calling the parent class (the SpecialPage class)
 		// constructor method with the name as first and only parameter.
-		parent::__construct( 'Calendar' );
+		parent::__construct( 'ICalCalendar' );
 	}
 
 	/**
@@ -35,7 +35,7 @@ EOM;
 		$out->setPageTitle( $this->msg( 'vuetest' ) );
 		$out->addSubtitle( $this->msg( 'vuetest-summary' ) );
         $out->addHTML( $markup );
-        $out->addModules( 'ext.Calendar' );
+        $out->addModules( 'ext.ICalCalendar' );
 	}
 
 	protected function getGroupName() {

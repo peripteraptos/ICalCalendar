@@ -1,5 +1,5 @@
 <?php
-namespace MediaWiki\Extension\Calendar;
+namespace MediaWiki\Extension\ICalCalendar;
 
 use ICal\ICal;
 use \DateTime;

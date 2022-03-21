@@ -1,11 +1,9 @@
 {
-	"name": "External Data Ical Parser",
-	"version": "3.0",
+	"name": "ICalCalendar",
+	"version": "1.0",
 	"author": [
 		"Ben Ackermann"
 	],
-	"url": "https://www.mediawiki.org/wiki/Extension:External_Data",
-	"descriptionmsg": "externaldata-desc",
 	"license-name": "GPL-2.0-or-later",
 	"type": "parserhook",
 	"requires": {
@@ -15,15 +13,11 @@
 		}
 	},
 	"load_composer_autoloader": true,
-	"AutoloadClasses": {
-		"EDParserICAL": "includes/EDParserICAL.php"
-	},
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\Calendar\\" : "includes/"
 	},
 	"config":{
 		"Sources":{
-			"room-plan": "https://outlook.office365.com/owa/calendar/727a18c97b91469aac237ebbff544a1d@staedelschule.de/7da8f137cad9496cbf3082ffc7f819b01756099346954354531/calendar.ics"
 		}
 	},
 	"Hooks": {
@@ -32,37 +26,31 @@
 	},
 	"HookHandlers": {
 		"handleHooks": {
-			"class": "MediaWiki\\Extension\\Calendar\\Hooks"
+			"class": "MediaWiki\\Extension\\ICalCalendar\\Hooks"
 		}
 	},
 	"ExtensionMessagesFiles": {
-		"CalendarMagic": "Calendar.i18n.magic.php"
+		"ICalCalendarMagic": "ICalCalendar.i18n.magic.php"
 	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "resources",
-		"remoteExtPath": "VueTest/resources"
+		"remoteExtPath": "ICalCalendar/resources"
 	},
 	"SpecialPages": {
-		"Calendar": "MediaWiki\\Extension\\Calendar\\SpecialCalendar"
+		"ICalCalendar": "MediaWiki\\Extension\\ICalCalendar\\SpecialCalendar"
 	},
 	"ResourceModules": {
-		"ext.Calendar": {
+		"ext.ICalCalendar": {
 			"dependencies": [
-				"ext.Calendar.components",
 				"vue",
-				"date-fns",
 				"mediawiki.api"
 			],
 			"scripts": [
-				"init.js"
-			]
-		},
-		"ext.Calendar.components": {
-			"styles": [],
-			"packageFiles": [
-				"components/index.js",
-				"components/App.vue"
-			]
+				"calendar.umd.js"
+			],
+			"styles": [
+        "style.css"
+      ]
 		}
 	},
 	"manifest_version": 2

@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\Calendar;
+namespace MediaWiki\Extension\ICalCalendar;
 
 class VueCalendarModule extends \ResourceLoaderFileModule {
 	/** @inheritDoc */
