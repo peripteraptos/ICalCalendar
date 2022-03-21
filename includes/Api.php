@@ -4,7 +4,7 @@ namespace MediaWiki\Extension\ICalCalendar;
 
 use ApiBase;
 
-class Api extends \ApiQueryBase {
+class Api extends ApiQueryBase {
 
 	/**
 	 * In this example we're returning one ore more properties
@@ -24,27 +24,7 @@ class Api extends \ApiQueryBase {
 		$this->getResult()->addValue( null, $this->getModuleName(), $events );
 	}
 
-	/** @inheritDoc */
-	public function getAllowedParams() {
-		return [
-			'calendar' => [
-				ApiBase::PARAM_TYPE => 'string',
-			],
-		];
-	}
-
-	/** @inheritDoc */
-	protected function getExamplesMessages() {
-		return [
-			'action=query&list=example'
-				=> 'apihelp-query+example-example-1',
-			'action=query&list=example&key=do'
-				=> 'apihelp-query+example-example-2',
-		];
-	}
-	
-
-	public function getCacheMode($params){
-		return "public";
-	}
+    public function getCacheMode( $params ) {
+        return 'public';
+    }
 }
