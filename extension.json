@@ -44,5 +44,8 @@
       "styles": ["style.css"]
     }
   },
+  "APIListModules": {
+    "calendar": "MediaWiki\\Extension\\ICalCalendar\\Api"
+  },
   "manifest_version": 2
 }
