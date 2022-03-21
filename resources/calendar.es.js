@@ -4599,4 +4599,4 @@ const _sfc_main = {
     };
   }
 };
-createApp(_sfc_main).mount("#app");
+createApp(_sfc_main).mount("#vue-root");
