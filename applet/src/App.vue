@@ -166,7 +166,9 @@ export default {
 .week-days {
   display: grid;
   grid-gap: 1px;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .week-days {
   display: none;
