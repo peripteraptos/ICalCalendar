@@ -1,0 +1,11 @@
+{
+    "name": "mediawik/calendar",
+    "require": {
+        "johngrogg/ics-parser": "^3.1"
+    },
+    "authors": [
+        {
+            "name": "Benedikt Ackermann"
+        }
+    ]
+}

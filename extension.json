@@ -1,0 +1,57 @@
+{
+	"name": "ICalCalendar",
+	"version": "1.0",
+	"author": [
+		"Ben Ackermann"
+	],
+	"license-name": "GPL-2.0-or-later",
+	"type": "parserhook",
+	"requires": {
+		"MediaWiki": ">= 1.29.0",
+		"extensions":{
+			"External Data": ">= 3.0"
+		}
+	},
+	"load_composer_autoloader": true,
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\Calendar\\" : "includes/"
+	},
+	"config":{
+		"Sources":{
+		}
+	},
+	"Hooks": {
+		"ParserFirstCallInit": "handleHooks",
+		"BeforePageDisplay": "handleHooks"
+	},
+	"HookHandlers": {
+		"handleHooks": {
+			"class": "MediaWiki\\Extension\\ICalCalendar\\Hooks"
+		}
+	},
+	"ExtensionMessagesFiles": {
+		"ICalCalendarMagic": "ICalCalendar.i18n.magic.php"
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "resources",
+		"remoteExtPath": "ICalCalendar/resources"
+	},
+	"SpecialPages": {
+		"ICalCalendar": "MediaWiki\\Extension\\ICalCalendar\\SpecialCalendar"
+	},
+	"ResourceModules": {
+		"ext.ICalCalendar": {
+			"dependencies": [
+				"vue",
+				"mediawiki.api"
+			],
+			"scripts": [
+				"calendar.umd.js"
+			],
+			"styles": [
+        "style.css"
+      ]
+		}
+	},
+	"manifest_version": 2
+}
