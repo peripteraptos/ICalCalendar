@@ -3,8 +3,18 @@
 namespace MediaWiki\Extension\ICalCalendar;
 
 use ApiBase;
+use ApiQueryBase;
 
-class Api extends \ApiQueryBase {
+
+class Api extends ApiQueryBase {
+
+	/**
+	 * @param \ApiQuery $query
+	 * @param string $moduleName
+	 */
+	public function __construct( $query, $moduleName ) {
+		parent::__construct( $query, $moduleName, 'calendar' );
+	}
 
 	/**
 	 * In this example we're returning one ore more properties
