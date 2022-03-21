@@ -32,6 +32,10 @@
   "SpecialPages": {
     "ICalCalendar": "MediaWiki\\Extension\\ICalCalendar\\SpecialCalendar"
   },
+  "ResourceFileModulePaths": {
+    "localBasePath": "resources",
+    "remoteExtPath": "ICalCalendar/resources"
+  },
   "ResourceModules": {
     "ext.ICalCalendar": {
       "dependencies": ["vue", "mediawiki.api"],
