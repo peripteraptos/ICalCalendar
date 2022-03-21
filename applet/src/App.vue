@@ -301,7 +301,7 @@ body {
 @media screen and (min-width: 1024px) {
   .days,
   .week-days {
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, minmax(0, 1fr));
   }
   .week-days {
     display: grid;
