@@ -4,7 +4,7 @@ namespace MediaWiki\Extension\ICalCalendar;
 
 use ApiBase;
 
-class Api extends ApiQueryBase {
+class Api extends \ApiQueryBase {
 
 	/**
 	 * In this example we're returning one ore more properties
