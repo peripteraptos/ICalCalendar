@@ -23,7 +23,7 @@ class Api extends ApiQueryBase {
 	 */
 	public function execute() {
 		global $wgCalendarSources;
-		$cachedFile = $wgTmpDirectory."/calendar.json";
+		$cachedFile = wfTempDir()."/calendar.json";
 
 		if (file_exists($cachedFile) &&
 			time()-filemtime($cachedFile) < 2 * 3600) {
