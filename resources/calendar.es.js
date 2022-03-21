@@ -6183,7 +6183,7 @@ var _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const API_URL = mw ? mw.config.values.wgScriptPath + "/api.php?action=query&format=json&prop=&list=calendar" : "/calendar.json";
+const API_URL = typeof mw !== "undefined" ? mw.config.values.wgScriptPath + "/api.php?action=query&format=json&prop=&list=calendar" : "/calendar.json";
 const _sfc_main = {
   data() {
     return {
@@ -6287,7 +6287,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         class: "nextYear",
         onClick: _cache[2] || (_cache[2] = (...args) => $options.addOneMonth && $options.addOneMonth(...args))
       }, ">"),
-      createBaseVNode("span", _hoisted_3, toDisplayString($options.format($data.currentMonth, "MMM yyyy")), 1)
+      createBaseVNode("span", _hoisted_3, toDisplayString($options.format($data.currentMonth, "MMMM yyyy")), 1)
     ]),
     createBaseVNode("div", _hoisted_4, [
       (openBlock(true), createElementBlock(Fragment, null, renderList($options.weekNames, (weekName) => {
