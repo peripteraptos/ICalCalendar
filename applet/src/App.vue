@@ -141,6 +141,7 @@ export default {
         .then(
           d =>
             (this.dates = d.map(d => {
+              d = d.calendar;
               const startDate = parseJSON(d.startDate);
               const endDate = parseJSON(d.startDate);
 
