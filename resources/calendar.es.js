@@ -6183,7 +6183,7 @@ var _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const API_URL = "/calendar.json";
+const API_URL = mw ? mw.config.values.wgScriptPath + "/api.php?action=query&format=json&prop=&list=calendar" : "/calendar.json";
 const _sfc_main = {
   data() {
     return {
