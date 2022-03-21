@@ -16,15 +16,11 @@ class Api extends \ApiQueryBase {
 		$params = $this->extractRequestParams();
 
 		$events = [];
-
-		if ( isset( $params['calendar'] ) ) {
-			$key = $params['calendar'];
-			if ( isset( $wgCalendarSources[$key] ) ) {
-				$cal = new Calendar($calendar["url"],$name);
-				$events = $cal->getMappedEvents();
-			}
-		} 
-
+		foreach($wgCalendarSources as $name => $calendar){
+			$cal = new Calendar($calendar["url"],$name);
+			$events = [...$events, $cal->getMappedEvents()];
+		}
+		
 		$this->getResult()->addValue( null, $this->getModuleName(), $events );
 	}
 
