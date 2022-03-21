@@ -12,7 +12,7 @@ class Api extends \ApiQueryBase {
 	 * method would probably
 	 */
 	public function execute() {
-		global $wgExampleFooStuff;
+		global $wgCalendarSources;
 		$params = $this->extractRequestParams();
 
 		$events = [];
@@ -20,7 +20,7 @@ class Api extends \ApiQueryBase {
 			$cal = new Calendar($calendar["url"],$name);
 			$events = [...$events, $cal->getMappedEvents()];
 		}
-		
+
 		$this->getResult()->addValue( null, $this->getModuleName(), $events );
 	}
 
