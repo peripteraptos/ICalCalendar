@@ -237,7 +237,7 @@ body {
   padding: 3px;
   border-left: 5px solid #0000aa;
   padding-left: 1em;
-  line-height: 1.25;
+  line-height: 1.5;
   font-size: 0.9em;
   //border-radius: 5px;
   margin-bottom: 2px;
