@@ -18,7 +18,7 @@ class Api extends \ApiQueryBase {
 		$events = [];
 		foreach($wgCalendarSources as $name => $calendar){
 			$cal = new Calendar($calendar["url"],$name);
-			$events = array_merge($events, $cal->getMappedEvents());
+			array_push($events, ...$cal->getMappedEvents());
 		}
 
 		$this->getResult()->addValue( null, $this->getModuleName(), $events );
