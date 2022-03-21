@@ -2,7 +2,7 @@
   <div class="calendar">
     <div class="header">
       <button class="previousYear" @click="substractOneMonth">&lt;</button>
-      <button class="currentPeriod" @click="resetToToday">Janurary 2021</button>
+      <button class="currentPeriod" @click="resetToToday">↺</button>
       <button class="nextYear" @click="addOneMonth">&gt;</button>
       <span class="current">
         {{ format(currentMonth, "MMM yyyy") }}

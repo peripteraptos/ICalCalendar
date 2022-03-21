@@ -6282,7 +6282,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       createBaseVNode("button", {
         class: "currentPeriod",
         onClick: _cache[1] || (_cache[1] = (...args) => $options.resetToToday && $options.resetToToday(...args))
-      }, "Janurary 2021"),
+      }, "\u21BA"),
       createBaseVNode("button", {
         class: "nextYear",
         onClick: _cache[2] || (_cache[2] = (...args) => $options.addOneMonth && $options.addOneMonth(...args))
