@@ -23,12 +23,20 @@ class Api extends ApiQueryBase {
 	 */
 	public function execute() {
 		global $wgCalendarSources;
-		$params = $this->extractRequestParams();
+		$cachedFile = $wgTmpDirectory."/calendar.json";
 
-		$events = [];
-		foreach($wgCalendarSources as $name => $calendar){
-			$cal = new Calendar($calendar["url"],$name);
-			array_push($events, ...$cal->getMappedEvents());
+		if (file_exists($cachedFile) &&
+			time()-filemtime($cachedFile) < 2 * 3600) {
+			$events = json_decode(file_get_contents($cachedFile));
+
+		}else{
+			$events = [];
+			foreach($wgCalendarSources as $name => $calendar){
+				$cal = new Calendar($calendar["url"],$name);
+				array_push($events, ...$cal->getMappedEvents());
+			}
+
+			file_put_contents($cachedFile, json_encode($events));
 		}
 
 		$this->getResult()->addValue( null, $this->getModuleName(), $events );
