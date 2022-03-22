@@ -31,23 +31,25 @@
           <span class="long">{{ format(day, "EEEE, dd. MMMM") }}</span>
         </div>
         <div
-          v-for="(event, index) in events"
+          v-for="(
+            { description, type, startDate, endDate, title }, index
+          ) in events"
           :key="index"
           class="event"
-          :class="[{ hasDescription: !!event.description }, event.type]"
+          :class="[{ hasDescription: !!description }, type]"
         >
           <div class="time">
-            {{ event.startHour + ":00" }}
-            <span class="end"> – {{ event.endHour + ":00" }}</span>
+            {{ format(startDate, "HH:mm") }}
+            <span class="end"> – {{ format(endDate, "HH:mm") }}</span>
           </div>
-          <div>{{ event.title }}</div>
-          <div class="description" v-if="!!event.description">
-            <p class="title">{{ event.title }}</p>
+          <div>{{ title }}</div>
+          <div class="description" v-if="!!description">
+            <p class="title">{{ title }}</p>
             <p class="time">
-              {{ event.startHour + ":00" }} – {{ event.endHour + ":00" }}
+              {{ format(startDate, "HH:mm") }} – {{ format(endDate, "HH:mm") }}
             </p>
             <div linkify>
-              {{ event.description }}
+              {{ description }}
             </div>
           </div>
         </div>
@@ -74,6 +76,8 @@ import {
   getHours
 } from "date-fns";
 import en from "date-fns/locale/en-US";
+import { getMinutes } from "date-fns/esm";
+import endOfMinute from "date-fns/fp/endOfMinute/index.js";
 
 const API_URL =
   typeof mw !== "undefined"
@@ -148,9 +152,7 @@ export default {
               return {
                 ...d,
                 startDate,
-                endDate,
-                startHour: getHours(startDate),
-                endHour: getHours(endDate)
+                endDate
               };
             }))
         );
