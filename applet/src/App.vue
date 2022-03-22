@@ -72,12 +72,9 @@ import {
   getDay,
   isToday,
   isSameDay,
-  parseJSON,
-  getHours
+  parseJSON
 } from "date-fns";
 import en from "date-fns/locale/en-US";
-import { getMinutes } from "date-fns/esm";
-import endOfMinute from "date-fns/fp/endOfMinute/index.js";
 
 const API_URL =
   typeof mw !== "undefined"
@@ -146,13 +143,10 @@ export default {
         .then(
           d =>
             (this.dates = d.calendar.map(d => {
-              const startDate = parseJSON(d.startDate);
-              const endDate = parseJSON(d.endDate);
-
               return {
                 ...d,
-                startDate,
-                endDate
+                startDate: parseJSON(d.startDate),
+                endDate: parseJSON(d.endDate)
               };
             }))
         );
