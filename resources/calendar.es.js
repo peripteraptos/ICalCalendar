@@ -6125,12 +6125,6 @@ function getDay(dirtyDate) {
   var day = date.getDay();
   return day;
 }
-function getHours(dirtyDate) {
-  requiredArgs(1, arguments);
-  var date = toDate(dirtyDate);
-  var hours = date.getHours();
-  return hours;
-}
 function subDays(dirtyDate, dirtyAmount) {
   requiredArgs(2, arguments);
   var amount = toInteger(dirtyAmount);
@@ -6240,9 +6234,7 @@ const _sfc_main = {
         const endDate = parseJSON(d2.endDate);
         return __spreadProps(__spreadValues({}, d2), {
           startDate,
-          endDate,
-          startHour: getHours(startDate),
-          endHour: getHours(endDate)
+          endDate
         });
       }));
     }
@@ -6309,20 +6301,20 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
             createBaseVNode("span", _hoisted_8, toDisplayString($options.format(day, "dd")), 1),
             createBaseVNode("span", _hoisted_9, toDisplayString($options.format(day, "EEEE, dd. MMMM")), 1)
           ]),
-          (openBlock(true), createElementBlock(Fragment, null, renderList(events, (event, index2) => {
+          (openBlock(true), createElementBlock(Fragment, null, renderList(events, ({ description, type, startDate, endDate, title }, index2) => {
             return openBlock(), createElementBlock("div", {
               key: index2,
-              class: normalizeClass(["event", [{ hasDescription: !!event.description }, event.type]])
+              class: normalizeClass(["event", [{ hasDescription: !!description }, type]])
             }, [
               createBaseVNode("div", _hoisted_10, [
-                createTextVNode(toDisplayString(event.startHour + ":00") + " ", 1),
-                createBaseVNode("span", _hoisted_11, " \u2013 " + toDisplayString(event.endHour + ":00"), 1)
+                createTextVNode(toDisplayString($options.format(startDate, "HH:mm")) + " ", 1),
+                createBaseVNode("span", _hoisted_11, " \u2013 " + toDisplayString($options.format(endDate, "HH:mm")), 1)
               ]),
-              createBaseVNode("div", null, toDisplayString(event.title), 1),
-              !!event.description ? (openBlock(), createElementBlock("div", _hoisted_12, [
-                createBaseVNode("p", _hoisted_13, toDisplayString(event.title), 1),
-                createBaseVNode("p", _hoisted_14, toDisplayString(event.startHour + ":00") + " \u2013 " + toDisplayString(event.endHour + ":00"), 1),
-                createBaseVNode("div", _hoisted_15, toDisplayString(event.description), 1)
+              createBaseVNode("div", null, toDisplayString(title), 1),
+              !!description ? (openBlock(), createElementBlock("div", _hoisted_12, [
+                createBaseVNode("p", _hoisted_13, toDisplayString(title), 1),
+                createBaseVNode("p", _hoisted_14, toDisplayString($options.format(startDate, "HH:mm")) + " \u2013 " + toDisplayString($options.format(endDate, "HH:mm")), 1),
+                createBaseVNode("div", _hoisted_15, toDisplayString(description), 1)
               ])) : createCommentVNode("", true)
             ], 2);
           }), 128))
