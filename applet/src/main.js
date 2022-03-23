@@ -1,7 +1,9 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import linkify from "vue-linkify";
+import linkifyHtml from "linkify-html";
 
-Vue.directive("linkified", linkify);
+const app = createApp(App).mount("#vue-root");
 
-createApp(App).mount("#vue-root");
+app.directive("linkify", (el, binding) => {
+  el.innerHTML = linkifyHtml(el.innerHTML);
+});
