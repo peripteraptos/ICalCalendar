@@ -345,20 +345,10 @@ is-number@^7.0.0:
   resolved "https://registry.yarnpkg.com/is-number/-/is-number-7.0.0.tgz#7535345b896734d5f80c4d06c50955527a14f12b"
   integrity sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==
 
-linkify-html@^3.0.5:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/linkify-html/-/linkify-html-3.0.5.tgz#317181f7603e17b7d38492b0f6fdf9cce14f1e6b"
-  integrity sha512-3O7HEYjkugX+C/G2C2wyBmIt8Mt0pmeaHNIxRHodCFeQQeSxSoZHR+5hC1pi0WrmoEvfnSemyZyYTM8w3lo9cA==
-
 linkify@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/linkify/-/linkify-0.2.1.tgz#a1b66435eae0495ed1b34143277c4b09c14cad73"
   integrity sha1-obZkNergSV7Rs0FDJ3xLCcFMrXM=
-
-linkifyjs@^3.0.5:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-3.0.5.tgz#99e51a3a0c0e232fcb63ebb89eea3ff923378f34"
-  integrity sha512-1Y9XQH65eQKA9p2xtk+zxvnTeQBG7rdAXSkUG97DmuI/Xhji9uaUzaWxRj6rf9YC0v8KKHkxav7tnLX82Sz5Fg==
 
 magic-string@^0.25.7:
   version "0.25.9"
@@ -459,6 +449,11 @@ to-regex-range@^5.0.1:
   integrity sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==
   dependencies:
     is-number "^7.0.0"
+
+v-linkify@^1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/v-linkify/-/v-linkify-1.0.12.tgz#0a53add377d0d6c30521b4042eeb53868b89fbe1"
+  integrity sha512-GewlLqs6SquL5BMiVwNc6wTGTq6sPFl5hh8qpScoVAxp3rrFygAA/9kQVhGZLtOmpE8zpGEKamY+EuEcrGvRpA==
 
 vite@^2.8.0:
   version "2.8.6"
