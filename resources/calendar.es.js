@@ -6235,6 +6235,24 @@ const _sfc_main = {
           endDate: parseJSON(d2.endDate)
         });
       }));
+    },
+    linkify(string) {
+      var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
+      var pseudoUrlPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+      var emailAddressPattern = /[\w.]+@[a-zA-Z_-]+?(?:\.[a-zA-Z]{2,6})+/gim;
+      return this.sanitize(string).replace(urlPattern, '<a href="$&">$&</a>').replace(pseudoUrlPattern, '$1<a href="http://$2">$2</a>').replace(emailAddressPattern, '<a href="mailto:$&">$&</a>');
+    },
+    sanitize(string) {
+      const map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#x27;",
+        "/": "&#x2F;"
+      };
+      const reg = /[&<>"'/]/gi;
+      return string.replace(reg, (match2) => map[match2]);
     }
   },
   mounted() {
@@ -6261,7 +6279,7 @@ const _hoisted_12 = {
 };
 const _hoisted_13 = { class: "title" };
 const _hoisted_14 = { class: "time" };
-const _hoisted_15 = { linkify: "" };
+const _hoisted_15 = ["innerHTML"];
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", _hoisted_1, [
     createBaseVNode("div", _hoisted_2, [
@@ -6312,7 +6330,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
               !!description ? (openBlock(), createElementBlock("div", _hoisted_12, [
                 createBaseVNode("p", _hoisted_13, toDisplayString(title), 1),
                 createBaseVNode("p", _hoisted_14, toDisplayString($options.format(startDate, "HH:mm")) + " \u2013 " + toDisplayString($options.format(endDate, "HH:mm")), 1),
-                createBaseVNode("div", _hoisted_15, toDisplayString(description), 1)
+                createBaseVNode("div", {
+                  innerHTML: $options.linkify(description)
+                }, null, 8, _hoisted_15)
               ])) : createCommentVNode("", true)
             ], 2);
           }), 128))
