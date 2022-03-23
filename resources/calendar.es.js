@@ -8017,7 +8017,8 @@ function attrsToStrings(attrs) {
   }
   return attrStrs;
 }
-const app = createApp(App).mount("#vue-root");
+const app = createApp(App);
+app.mount("#vue-root");
 app.directive("linkify", (el, binding) => {
   el.innerHTML = linkifyHtml(el.innerHTML);
 });
