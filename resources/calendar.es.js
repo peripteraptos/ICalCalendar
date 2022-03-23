@@ -6245,13 +6245,12 @@ const _sfc_main = {
     sanitize(string) {
       const map = {
         "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
+        "<": " ",
+        ">": " ",
         '"': "&quot;",
-        "'": "&#x27;",
-        "/": "&#x2F;"
+        "'": "&#x27;"
       };
-      const reg = /[&<>"'/]/gi;
+      const reg = /[&<>"']/gi;
       return string.replace(reg, (match2) => map[match2]);
     }
   },
@@ -6342,77 +6341,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   ]);
 }
 var App = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
-const REGEX_PATTERN = {
-  URL: /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim,
-  PSEUDO_URL: /\bwww\.[\S]+\.[\S]+/gim,
-  EMAIL_ADDRESS: /[\w.]+@[a-zA-Z_-]+?(?:\.[a-zA-Z]{2,6})+/gim
-};
-const LINK_TARGET = {
-  DEFAULT: "_blank"
-};
-function findMatchedText(text = "") {
-  return [
-    ...text.matchAll(REGEX_PATTERN.EMAIL_ADDRESS),
-    ...text.matchAll(REGEX_PATTERN.URL),
-    ...text.matchAll(REGEX_PATTERN.PSEUDO_URL)
-  ].flat();
-}
-function createElementAttributesOptions(params) {
-  if (_isObject(params)) {
-    const elClass = _createDOMClass(params == null ? void 0 : params.className);
-    const elLinkTarget = _createLinkTarget(params == null ? void 0 : params.target);
-    return `${elClass} ${elLinkTarget}`;
-  }
-  return _createLinkTarget();
-}
-function formatText(baseText, matchedText, options) {
-  if (matchedText.match(REGEX_PATTERN.EMAIL_ADDRESS) !== null) {
-    baseText = _formatEmailText(baseText, matchedText, options);
-  }
-  if (matchedText.match(REGEX_PATTERN.URL) !== null || matchedText.match(REGEX_PATTERN.PSEUDO_URL) !== null) {
-    baseText = _formatUrlText(baseText, matchedText, options);
-  }
-  return baseText;
-}
-function _isObject(value) {
-  return value && typeof value === "object" && value !== null && !Array.isArray(value);
-}
-function _createDOMClass(className) {
-  return className ? `class="${className}"` : "";
-}
-function _createLinkTarget(target) {
-  return `target="${target || LINK_TARGET.DEFAULT}"`;
-}
-function _formatEmailText(baseText, matchedText, options) {
-  return baseText.replace(matchedText, `<a ${options} href="mailto:${matchedText}">${matchedText}</a>`);
-}
-function _formatUrlText(baseText, matchedText, options) {
-  const prefix = matchedText.toLowerCase().indexOf("http") === -1 && matchedText.toLowerCase().indexOf("ftp") === -1 ? "//" : "";
-  return baseText.replace(matchedText, `<a ${options} href="${prefix + matchedText.trim()}">${matchedText}</a>`);
-}
-function findLinksAndReplace(el, bindValue) {
-  el.innerHTML = el.textContent.split(" ").map((baseText) => {
-    let matchedTexts = findMatchedText(baseText) || [];
-    if (matchedTexts.length) {
-      const options = createElementAttributesOptions(bindValue);
-      matchedTexts.forEach((matchedText) => {
-        baseText = formatText(baseText, matchedText, options);
-      });
-    }
-    return baseText;
-  }).join(" ");
-}
-const vLinkify = {
-  bind: function(el, binding) {
-    findLinksAndReplace(el, binding == null ? void 0 : binding.value);
-  },
-  componentUpdated: function(el, binding, vNode) {
-    var _a;
-    const newEl = el;
-    newEl.textContent = ((_a = vNode == null ? void 0 : vNode.children[0]) == null ? void 0 : _a.text) || "";
-    findLinksAndReplace(newEl, binding == null ? void 0 : binding.value);
-  }
-};
 const app = createApp(App);
-app.directive("linkify", vLinkify);
 app.mount("#vue-root");

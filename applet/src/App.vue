@@ -168,13 +168,13 @@ export default {
     sanitize(string) {
       const map = {
         "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
+        "<": " ",
+        ">": " ",
         '"': "&quot;",
-        "'": "&#x27;",
-        "/": "&#x2F;"
+        "'": "&#x27;"
+        //"/": "&#x2F;"
       };
-      const reg = /[&<>"'/]/gi;
+      const reg = /[&<>"']/gi;
       return string.replace(reg, match => map[match]);
     }
   },
@@ -356,6 +356,16 @@ body {
       background: white;
       padding: 1rem;
       border: 1px solid black;
+
+      a {
+        display: inline-block;
+        white-space: nowrap;
+        max-width: 170px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1;
+        vertical-align: text-bottom;
+      }
     }
   }
   .noEvents {
