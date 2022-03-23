@@ -6393,11 +6393,6 @@ const vLinkify = {
     findLinksAndReplace(newEl, binding == null ? void 0 : binding.value);
   }
 };
-var vLinkify$1 = {
-  install(Vue, options) {
-    Vue.directive("linkify", vLinkify);
-  }
-};
 const app = createApp(App);
 app.mount("#vue-root");
-app.directive("linkify", vLinkify$1);
+app.directive("linkify", vLinkify);
