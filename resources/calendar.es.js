@@ -8019,6 +8019,8 @@ function attrsToStrings(attrs) {
 }
 const app = createApp(App);
 app.mount("#vue-root");
-app.directive("linkify", (el, binding) => {
-  el.innerHTML = linkifyHtml(el.innerHTML);
+app.directive("linkify", {
+  beforeMount(el, binding, vnode) {
+    el.innerHTML = linkifyHtml(el.innerHTML);
+  }
 });
