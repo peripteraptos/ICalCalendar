@@ -6394,5 +6394,5 @@ const vLinkify = {
   }
 };
 const app = createApp(App);
-app.mount("#vue-root");
 app.directive("linkify", vLinkify);
+app.mount("#vue-root");
