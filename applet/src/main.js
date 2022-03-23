@@ -1,13 +1,9 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import linkifyHtml from "linkify-html";
+import vLinkify from "v-linkify/src/indexgi";
 
 const app = createApp(App);
 
 app.mount("#vue-root");
 
-app.directive("linkify", {
-  beforeMount(el, binding, vnode) {
-    el.innerHTML = linkifyHtml(el.innerHTML);
-  }
-});
+app.directive("linkify", vLinkify);
