@@ -19,7 +19,7 @@
     "BeforePageDisplay": "handleHooks"
   },
   "JobClasses": {
-    "ReloadJob": "ReloadJob"
+    "ReloadJob": "MediaWiki\\Extension\\ICalCalendar\\ReloadJob"
   },
   "HookHandlers": {
     "handleHooks": {

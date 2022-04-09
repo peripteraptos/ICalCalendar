@@ -5,7 +5,7 @@ namespace MediaWiki\Extension\ICalCalendar;
 use ApiBase;
 use ApiQueryBase;
 use MediaWiki\MediaWikiServices;
-
+use \Job;
 
 
 class Api extends ApiQueryBase {
@@ -32,7 +32,7 @@ class Api extends ApiQueryBase {
 			} else {
 				$queue_group = JobQueueGroup::singleton();
 			}
-			$queue_group->push( Job::factory( 'ReloadJob' ));
+			$queue_group->push( new ReloadJob("bla"));
 		}
 		
 		$this->getResult()->addValue( null, $this->getModuleName(), $store->getEvents());
