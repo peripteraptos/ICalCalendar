@@ -24,7 +24,13 @@ class Api extends ApiQueryBase {
 	public function execute() {
 		$store = new CalendarStore();
 		if($store->cacheOutdated()){
-			JobQueueGroup::singleton()->push( new ReloadJob() );
+			if ( method_exists( MediaWikiServices::class, 'getJobQueueGroup' ) ) {
+				// MW 1.37+
+				$queue_group = MediaWikiServices::getInstance()->getJobQueueGroup();
+			} else {
+				$queue_group = JobQueueGroup::singleton();
+			}
+			$queue_group->push( new ReloadJob() );
 		}
 		
 		$this->getResult()->addValue( null, $this->getModuleName(), $store->getEvents());
