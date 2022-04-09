@@ -22,24 +22,12 @@ class Api extends ApiQueryBase {
 	 * method would probably
 	 */
 	public function execute() {
-		global $wgCalendarSources;
-		$cachedFile = wfTempDir()."/calendar.json";
-
-		if (file_exists($cachedFile) &&
-			time()-filemtime($cachedFile) < 2 * 3600) {
-			$events = json_decode(file_get_contents($cachedFile));
-
-		}else{
-			$events = [];
-			foreach($wgCalendarSources as $name => $calendar){
-				$cal = new Calendar($calendar["url"],$name);
-				array_push($events, ...$cal->getMappedEvents());
-			}
-
-			file_put_contents($cachedFile, json_encode($events));
+		$store = new CalendarStore();
+		if($store->cacheOutdated()){
+			JobQueueGroup::singleton()->push( new ReloadJob() );
 		}
-
-		$this->getResult()->addValue( null, $this->getModuleName(), $events );
+		
+		$this->getResult()->addValue( null, $this->getModuleName(), $store->getEvents());
 	}
 
     public function getCacheMode( $params ) {
