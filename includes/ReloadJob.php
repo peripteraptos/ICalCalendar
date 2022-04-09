@@ -7,7 +7,7 @@ namespace MediaWiki\Extension\ICalCalendar;
  * @author Alexander Mashin
  *
  */
-class ReloadJob extends Job {
+class ReloadJob extends \Job {
 	/**
 	 * @see Job::run
 	 *
