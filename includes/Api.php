@@ -4,6 +4,8 @@ namespace MediaWiki\Extension\ICalCalendar;
 
 use ApiBase;
 use ApiQueryBase;
+use MediaWiki\MediaWikiServices;
+
 
 
 class Api extends ApiQueryBase {
