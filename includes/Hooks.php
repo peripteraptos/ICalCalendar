@@ -10,7 +10,7 @@ class Hooks implements
  {
 
 	public function onBeforePageDisplay( $out, $skin ): void {
-		$out->addModules( 'ext.ICalCalendar' );
+		$out->addModules( ['ext.ICalCalendar'] );
 	}
 
 
