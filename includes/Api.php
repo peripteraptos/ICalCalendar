@@ -32,7 +32,7 @@ class Api extends ApiQueryBase {
 			} else {
 				$queue_group = JobQueueGroup::singleton();
 			}
-			$queue_group->push( new ReloadJob("bla"));
+			$queue_group->push( new ReloadJob("bla",[]));
 		}
 		
 		$this->getResult()->addValue( null, $this->getModuleName(), $store->getEvents());
