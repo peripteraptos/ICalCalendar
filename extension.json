@@ -14,9 +14,6 @@
   "AutoloadNamespaces": {
     "MediaWiki\\Extension\\ICalCalendar\\": "includes/"
   },
-  "config": {
-    "Sources": {}
-  },
   "Hooks": {
     "ParserFirstCallInit": "handleHooks",
     "BeforePageDisplay": "handleHooks"
