@@ -1,6 +1,4 @@
 <?php
-namespace MediaWiki\Extension\ICalCalendar;
-
 /**
  * A job that reparses a wiki page, if time is come.
  *
