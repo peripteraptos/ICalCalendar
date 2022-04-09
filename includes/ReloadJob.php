@@ -1,11 +1,14 @@
 <?php
+namespace MediaWiki\Extension\ICalCalendar;
+
+use \Job;
 /**
  * A job that reparses a wiki page, if time is come.
  *
  * @author Alexander Mashin
  *
  */
-class ReloadJob extends \Job {
+class ReloadJob extends Job {
 	/**
 	 * @see Job::run
 	 *
