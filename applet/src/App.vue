@@ -362,8 +362,10 @@ export default {
       border-radius: 3px;
       color: black;
       padding: 0.25rem 0.5rem;
-      cursor: pointer;
       //margin-right: 5px;
+    }
+    button {
+      cursor: pointer;
     }
     .current {
       margin-left: 1rem;
