@@ -290,9 +290,10 @@ $border-color: #a2a9b1;
   background: #f8f9fa;
   color: black;
   button {
-    background: transparent;
+    background: white;
     box-shadow: none;
-    border: 1px solid white;
+    border: 1px solid #a2a9b1;
+    border-radius: 3px;
     color: black;
     padding: 0.25rem 0.5rem;
     cursor: pointer;
