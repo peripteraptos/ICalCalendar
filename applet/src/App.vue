@@ -271,13 +271,14 @@ export default {
   }
 }
 .week-days {
-  background: lightslategray;
-  color: white;
+  background: #f8f9fa;
+  border: 1px solid #a2a9b1;
+  border-top: 0;
+  color: black;
 }
 .days {
   background: #f0f0f0;
-  p {
-  }
+  border-radius: 0 0 3px 3px;
 }
 #app,
 #app > div,
@@ -301,17 +302,19 @@ body {
 }
 
 .header {
+  border: 1px solid #a2a9b1;
+  border-radius: 3px 3px 0 0;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   padding: 0.75rem 1rem;
-  background: lightslategray;
-  color: white;
+  background: #f8f9fa;
+  color: black;
   button {
     background: transparent;
     box-shadow: none;
     border: 1px solid white;
-    color: white;
+    color: black;
     padding: 0.25rem 0.5rem;
     cursor: pointer;
     margin-right: 5px;
