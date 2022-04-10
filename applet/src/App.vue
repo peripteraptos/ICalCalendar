@@ -192,7 +192,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+$border-color: #a2a9b1;
 @keyframes rcfiltersBouncedelay {
   0%,
   50%,
@@ -240,15 +241,6 @@ export default {
   }
 }
 
-.body:not(.mw-rcfilters-ui-initialized) .mw-rcfilters-spinner {
-  display: block;
-  margin-top: -153.33333333px;
-}
-
-.body.mw-rcfilters-ui-loading .mw-rcfilters-spinner {
-  display: block;
-}
-
 .days,
 .week-days {
   display: grid;
@@ -277,28 +269,16 @@ export default {
   color: black;
 }
 .days {
-  background: #f0f0f0;
+  background: #f8f9fa;
+  border: 1px solid #a2a9b1;
+  border-top: 0;
   border-radius: 0 0 3px 3px;
-}
-#app,
-#app > div,
-html,
-body {
-  height: 100%;
-  margin: 0;
-}
-
-#app {
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica,
-    sans-serif;
-}
-
-.days {
   height: 80%;
 }
 
 .day {
   background: white;
+  box-shadow: 0 0 0 1px #d9d9d9;
 }
 
 .header {

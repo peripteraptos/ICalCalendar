@@ -1229,6 +1229,12 @@ function setCurrentRenderingInstance(instance) {
   currentScopeId = instance && instance.type.__scopeId || null;
   return prev;
 }
+function pushScopeId(id) {
+  currentScopeId = id;
+}
+function popScopeId() {
+  currentScopeId = null;
+}
 function withCtx(fn, ctx = currentRenderingInstance, isNonScopedSlot) {
   if (!ctx)
     return fn;
@@ -6169,7 +6175,7 @@ function parseJSON(argument) {
   }
   return toDate(argument);
 }
-var App_vue_vue_type_style_index_0_lang = "";
+var App_vue_vue_type_style_index_0_scoped_true_lang = "";
 var _export_sfc = (sfc, props) => {
   const target = sfc.__vccOpts || sfc;
   for (const [key, val] of props) {
@@ -6262,11 +6268,12 @@ const _sfc_main = {
     this.fetchDates();
   }
 };
+const _withScopeId = (n) => (pushScopeId("data-v-25500af3"), n = n(), popScopeId(), n);
 const _hoisted_1 = {
   key: 0,
   class: "cal-loading-spinner"
 };
-const _hoisted_2 = /* @__PURE__ */ createBaseVNode("div", { class: "cal-loading-spinner-bounce" }, null, -1);
+const _hoisted_2 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("div", { class: "cal-loading-spinner-bounce" }, null, -1));
 const _hoisted_3 = [
   _hoisted_2
 ];
@@ -6355,6 +6362,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]));
 }
-var App = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
+var App = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-25500af3"]]);
 const app = createApp(App);
 app.mount("#vue-root");
