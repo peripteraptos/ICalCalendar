@@ -4,13 +4,28 @@
       <div class="cal-loading-spinner-bounce"></div>
     </div>
     <div class="calendar" v-else>
-      <div class="header">
-        <button class="previousYear" @click="substractOneMonth">&lt;</button>
-        <button class="currentPeriod" @click="resetToToday">↺</button>
-        <button class="nextYear" @click="addOneMonth">&gt;</button>
-        <span class="current">
-          {{ format(currentMonth, "MMMM yyyy") }}
-        </span>
+      <div class="header" style="display: flex; justify-content: space-between">
+        <div class="calnav">
+          <button class="previousYear" @click="substractOneMonth">&lt;</button>
+          <button class="currentPeriod" @click="resetToToday">↺</button>
+          <button class="nextYear" @click="addOneMonth">&gt;</button>
+          <span class="current">
+            {{ format(currentMonth, "MMMM yyyy") }}
+          </span>
+        </div>
+        <div class="types">
+          <button
+            v-for="calendar in calendars"
+            :key="calendar"
+            @click="toggleCalendar(calendar)"
+            :class="[
+              { 'has-low-opacity': hiddenCalendar.includes(calendar) },
+              calendar.replace(' ', '_')
+            ]"
+          >
+            {{ calendar }}
+          </button>
+        </div>
       </div>
       <div class="week-days">
         <p v-for="weekName in weekNames" :key="weekName">{{ weekName }}</p>
@@ -40,7 +55,7 @@
             ) in events"
             :key="index"
             class="event"
-            :class="[{ hasDescription: !!description }, type]"
+            :class="[{ hasDescription: !!description }, type.replace(' ', '_')]"
           >
             <div class="time">
               {{ format(startDate, "HH:mm") }}
@@ -95,7 +110,8 @@ export default {
         weekStartsOn: 1 // monday
       }),
       dates: [],
-      loading: false
+      loading: false,
+      hiddenCalendar: []
     };
   },
   directives: {},
@@ -112,7 +128,7 @@ export default {
         end: sub(this.nextMonth, { days: 1 })
       }).map(day => ({
         day,
-        events: this.dates.filter(e => isSameDay(e.startDate, day))
+        events: this.filteredDates.filter(e => isSameDay(e.startDate, day))
       }));
     },
     weekNames() {
@@ -127,9 +143,21 @@ export default {
       return (
         this.daysOfCurrentMonth.filter(d => d.events.length > 0).length > 0
       );
+    },
+    calendars() {
+      return [...new Set(this.dates.map(d => d.type))];
+    },
+    filteredDates() {
+      return this.dates.filter(e => !this.hiddenCalendar.includes(e.type));
     }
   },
   methods: {
+    toggleCalendar(calendar) {
+      console.log(calendar);
+      this.hiddenCalendar = this.hiddenCalendar.includes(calendar)
+        ? this.hiddenCalendar.filter(c => c !== calendar)
+        : [...this.hiddenCalendar, calendar];
+    },
     format,
     isToday,
 
@@ -294,8 +322,12 @@ export default {
     padding: 0.75rem 1rem;
     background: #f8f9fa;
     color: black;
+    .calnav {
+      button {
+        background: white;
+      }
+    }
     button {
-      background: white;
       box-shadow: none;
       border: 1px solid #a2a9b1;
       border-radius: 3px;
@@ -377,7 +409,14 @@ export default {
     padding: 3rem 2rem;
     font-size: 1.25rem;
   }
+
+  .types {
+    display: none;
+  }
   @media screen and (min-width: 1024px) {
+    .types {
+      display: block;
+    }
     .days,
     .week-days {
       grid-gap: 1px;
@@ -431,6 +470,10 @@ export default {
     }
   }
 
+  .has-low-opacity {
+    opacity: 0.25;
+  }
+
   @media screen and (max-width: 1024px) {
     .day {
       grid-column-start: unset !important;
@@ -446,22 +489,22 @@ export default {
     }
   }
 
-  .event.RoomSchedule {
+  .Room_schedule {
     border-color: orange;
     background-color: lightyellow;
   }
 
-  .event.KeyDates {
+  .Key_dates {
     border-color: blue;
     background-color: lightblue;
   }
 
-  .event.Curriculum {
+  .Curriculum {
     border-color: green;
     background-color: lightgreen;
   }
 
-  .event.Lectures {
+  .Lectures {
     border-color: yellow;
     background-color: rgb(255, 255, 220);
   }

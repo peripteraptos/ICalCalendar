@@ -6187,7 +6187,8 @@ const _sfc_main = {
         weekStartsOn: 1
       }),
       dates: [],
-      loading: false
+      loading: false,
+      hiddenCalendar: []
     };
   },
   directives: {},
@@ -6204,7 +6205,7 @@ const _sfc_main = {
         end: sub(this.nextMonth, { days: 1 })
       }).map((day) => ({
         day,
-        events: this.dates.filter((e) => isSameDay(e.startDate, day))
+        events: this.filteredDates.filter((e) => isSameDay(e.startDate, day))
       }));
     },
     weekNames() {
@@ -6215,9 +6216,19 @@ const _sfc_main = {
     },
     currentMonthHasEvent() {
       return this.daysOfCurrentMonth.filter((d) => d.events.length > 0).length > 0;
+    },
+    calendars() {
+      return [...new Set(this.dates.map((d) => d.type))];
+    },
+    filteredDates() {
+      return this.dates.filter((e) => !this.hiddenCalendar.includes(e.type));
     }
   },
   methods: {
+    toggleCalendar(calendar) {
+      console.log(calendar);
+      this.hiddenCalendar = this.hiddenCalendar.includes(calendar) ? this.hiddenCalendar.filter((c) => c !== calendar) : [...this.hiddenCalendar, calendar];
+    },
     format,
     isToday,
     substractOneMonth() {
@@ -6275,51 +6286,71 @@ const _hoisted_5 = {
   key: 1,
   class: "calendar"
 };
-const _hoisted_6 = { class: "header" };
-const _hoisted_7 = { class: "current" };
-const _hoisted_8 = { class: "week-days" };
-const _hoisted_9 = { class: "days" };
-const _hoisted_10 = {
+const _hoisted_6 = {
+  class: "header",
+  style: { "display": "flex", "justify-content": "space-between" }
+};
+const _hoisted_7 = { class: "calnav" };
+const _hoisted_8 = { class: "current" };
+const _hoisted_9 = { class: "types" };
+const _hoisted_10 = ["onClick"];
+const _hoisted_11 = { class: "week-days" };
+const _hoisted_12 = { class: "days" };
+const _hoisted_13 = {
   key: 0,
   class: "noEvents"
 };
-const _hoisted_11 = { class: "dayN" };
-const _hoisted_12 = { class: "short" };
-const _hoisted_13 = { class: "long" };
-const _hoisted_14 = { class: "time" };
-const _hoisted_15 = { class: "end" };
-const _hoisted_16 = {
+const _hoisted_14 = { class: "dayN" };
+const _hoisted_15 = { class: "short" };
+const _hoisted_16 = { class: "long" };
+const _hoisted_17 = { class: "time" };
+const _hoisted_18 = { class: "end" };
+const _hoisted_19 = {
   key: 0,
   class: "description"
 };
-const _hoisted_17 = { class: "title" };
-const _hoisted_18 = { class: "time" };
-const _hoisted_19 = ["innerHTML"];
+const _hoisted_20 = { class: "title" };
+const _hoisted_21 = { class: "time" };
+const _hoisted_22 = ["innerHTML"];
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", _hoisted_1, [
     $data.loading ? (openBlock(), createElementBlock("div", _hoisted_2, _hoisted_4)) : (openBlock(), createElementBlock("div", _hoisted_5, [
       createBaseVNode("div", _hoisted_6, [
-        createBaseVNode("button", {
-          class: "previousYear",
-          onClick: _cache[0] || (_cache[0] = (...args) => $options.substractOneMonth && $options.substractOneMonth(...args))
-        }, "<"),
-        createBaseVNode("button", {
-          class: "currentPeriod",
-          onClick: _cache[1] || (_cache[1] = (...args) => $options.resetToToday && $options.resetToToday(...args))
-        }, "\u21BA"),
-        createBaseVNode("button", {
-          class: "nextYear",
-          onClick: _cache[2] || (_cache[2] = (...args) => $options.addOneMonth && $options.addOneMonth(...args))
-        }, ">"),
-        createBaseVNode("span", _hoisted_7, toDisplayString($options.format($data.currentMonth, "MMMM yyyy")), 1)
+        createBaseVNode("div", _hoisted_7, [
+          createBaseVNode("button", {
+            class: "previousYear",
+            onClick: _cache[0] || (_cache[0] = (...args) => $options.substractOneMonth && $options.substractOneMonth(...args))
+          }, "<"),
+          createBaseVNode("button", {
+            class: "currentPeriod",
+            onClick: _cache[1] || (_cache[1] = (...args) => $options.resetToToday && $options.resetToToday(...args))
+          }, "\u21BA"),
+          createBaseVNode("button", {
+            class: "nextYear",
+            onClick: _cache[2] || (_cache[2] = (...args) => $options.addOneMonth && $options.addOneMonth(...args))
+          }, ">"),
+          createBaseVNode("span", _hoisted_8, toDisplayString($options.format($data.currentMonth, "MMMM yyyy")), 1)
+        ]),
+        createBaseVNode("div", _hoisted_9, [
+          (openBlock(true), createElementBlock(Fragment, null, renderList($options.calendars, (calendar) => {
+            return openBlock(), createElementBlock("button", {
+              key: calendar,
+              onClick: ($event) => $options.toggleCalendar(calendar),
+              class: normalizeClass([
+                { "has-low-opacity": $data.hiddenCalendar.includes(calendar) },
+                calendar.replace(" ", "_")
+              ])
+            }, toDisplayString(calendar), 11, _hoisted_10);
+          }), 128))
+        ])
       ]),
-      createBaseVNode("div", _hoisted_8, [
+      createBaseVNode("div", _hoisted_11, [
         (openBlock(true), createElementBlock(Fragment, null, renderList($options.weekNames, (weekName) => {
           return openBlock(), createElementBlock("p", { key: weekName }, toDisplayString(weekName), 1);
         }), 128))
       ]),
-      createBaseVNode("div", _hoisted_9, [
-        !$options.currentMonthHasEvent ? (openBlock(), createElementBlock("div", _hoisted_10, " This month has no events ")) : createCommentVNode("", true),
+      createBaseVNode("div", _hoisted_12, [
+        !$options.currentMonthHasEvent ? (openBlock(), createElementBlock("div", _hoisted_13, " This month has no events ")) : createCommentVNode("", true),
         (openBlock(true), createElementBlock(Fragment, null, renderList($options.daysOfCurrentMonth, ({ day, events }, index) => {
           return openBlock(), createElementBlock("div", {
             key: day,
@@ -6329,26 +6360,26 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
               "grid-column-start": index === 0 ? $options.weekdayOffset : "0"
             })
           }, [
-            createBaseVNode("div", _hoisted_11, [
-              createBaseVNode("span", _hoisted_12, toDisplayString($options.format(day, "dd")), 1),
-              createBaseVNode("span", _hoisted_13, toDisplayString($options.format(day, "EEEE, dd. MMMM")), 1)
+            createBaseVNode("div", _hoisted_14, [
+              createBaseVNode("span", _hoisted_15, toDisplayString($options.format(day, "dd")), 1),
+              createBaseVNode("span", _hoisted_16, toDisplayString($options.format(day, "EEEE, dd. MMMM")), 1)
             ]),
             (openBlock(true), createElementBlock(Fragment, null, renderList(events, ({ description, type, startDate, endDate, title }, index2) => {
               return openBlock(), createElementBlock("div", {
                 key: index2,
-                class: normalizeClass(["event", [{ hasDescription: !!description }, type]])
+                class: normalizeClass(["event", [{ hasDescription: !!description }, type.replace(" ", "_")]])
               }, [
-                createBaseVNode("div", _hoisted_14, [
+                createBaseVNode("div", _hoisted_17, [
                   createTextVNode(toDisplayString($options.format(startDate, "HH:mm")) + " ", 1),
-                  createBaseVNode("span", _hoisted_15, " \u2013 " + toDisplayString($options.format(endDate, "HH:mm")), 1)
+                  createBaseVNode("span", _hoisted_18, " \u2013 " + toDisplayString($options.format(endDate, "HH:mm")), 1)
                 ]),
                 createBaseVNode("div", null, toDisplayString(title), 1),
-                !!description ? (openBlock(), createElementBlock("div", _hoisted_16, [
-                  createBaseVNode("p", _hoisted_17, toDisplayString(title), 1),
-                  createBaseVNode("p", _hoisted_18, toDisplayString($options.format(startDate, "HH:mm")) + " \u2013 " + toDisplayString($options.format(endDate, "HH:mm")), 1),
+                !!description ? (openBlock(), createElementBlock("div", _hoisted_19, [
+                  createBaseVNode("p", _hoisted_20, toDisplayString(title), 1),
+                  createBaseVNode("p", _hoisted_21, toDisplayString($options.format(startDate, "HH:mm")) + " \u2013 " + toDisplayString($options.format(endDate, "HH:mm")), 1),
                   createBaseVNode("div", {
                     innerHTML: $options.linkify(description.replace(/\n\s*\n/g, "\n"))
-                  }, null, 8, _hoisted_19)
+                  }, null, 8, _hoisted_22)
                 ])) : createCommentVNode("", true)
               ], 2);
             }), 128))
