@@ -383,6 +383,7 @@ export default {
     padding-left: 0.75em;
     line-height: 1.4;
     font-size: 0.9em;
+    word-break: break-word;
     //border-radius: 5px;
     position: relative;
     color: black;
