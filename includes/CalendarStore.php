@@ -23,6 +23,7 @@ class CalendarStore {
     }
 
     public function fetch(){
+        wfDebugLog('ICalCalendar','fetching...');
         global $wgCalendarSources;
         foreach($wgCalendarSources as $name => $calendar){
             $cal = new Calendar($calendar["url"],$name);
