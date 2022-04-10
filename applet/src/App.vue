@@ -328,7 +328,7 @@ export default {
     border: 1px solid #a2a9b1;
     border-radius: 3px 3px 0 0;
     flex-wrap: wrap;
-    gap: 0.75em;
+    gap: 1em 3em;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -338,12 +338,19 @@ export default {
     .calnav {
       button {
         background: white;
+        margin-right: 5px;
       }
-      margin-right: 1rem;
+    }
+
+    .types {
+      gap: 0.5em;
+      display: flex;
+      flex-wrap: wrap;
     }
 
     input.search {
       flex-grow: 1;
+      //width: 100%;
       //max-width: 400px;
       //margin: 0 2em;
     }
@@ -356,7 +363,7 @@ export default {
       color: black;
       padding: 0.25rem 0.5rem;
       cursor: pointer;
-      margin-right: 5px;
+      //margin-right: 5px;
     }
     .current {
       margin-left: 1rem;
