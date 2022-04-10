@@ -418,7 +418,7 @@ export default {
         a {
           display: inline-block;
           white-space: nowrap;
-          max-width: 170px;
+          max-width: min(300px, 90vw);
           overflow: hidden;
           text-overflow: ellipsis;
           line-height: 1;
