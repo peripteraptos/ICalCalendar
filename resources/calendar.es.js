@@ -6347,7 +6347,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
                   createBaseVNode("p", _hoisted_17, toDisplayString(title), 1),
                   createBaseVNode("p", _hoisted_18, toDisplayString($options.format(startDate, "HH:mm")) + " \u2013 " + toDisplayString($options.format(endDate, "HH:mm")), 1),
                   createBaseVNode("div", {
-                    innerHTML: $options.linkify(description)
+                    innerHTML: $options.linkify(description.replace(/\n\s*\n/g, "\n"))
                   }, null, 8, _hoisted_19)
                 ])) : createCommentVNode("", true)
               ], 2);

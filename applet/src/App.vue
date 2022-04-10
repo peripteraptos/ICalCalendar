@@ -53,7 +53,7 @@
                 {{ format(startDate, "HH:mm") }} –
                 {{ format(endDate, "HH:mm") }}
               </p>
-              <div v-html="linkify(description)" />
+              <div v-html="linkify(description.replace(/\n\s*\n/g, '\n'))" />
             </div>
           </div>
         </div>
