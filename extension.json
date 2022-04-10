@@ -18,9 +18,6 @@
     "ParserFirstCallInit": "handleHooks",
     "BeforePageDisplay": "handleHooks"
   },
-  "JobClasses": {
-    "ReloadJob": "MediaWiki\\Extension\\ICalCalendar\\ReloadJob"
-  },
   "HookHandlers": {
     "handleHooks": {
       "class": "MediaWiki\\Extension\\ICalCalendar\\Hooks"

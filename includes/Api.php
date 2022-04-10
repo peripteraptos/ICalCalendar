@@ -5,7 +5,7 @@ namespace MediaWiki\Extension\ICalCalendar;
 use ApiBase;
 use ApiQueryBase;
 use MediaWiki\MediaWikiServices;
-use \Job;
+use \DeferredUpdates;
 
 
 class Api extends ApiQueryBase {
@@ -26,13 +26,7 @@ class Api extends ApiQueryBase {
 	public function execute() {
 		$store = new CalendarStore();
 		if($store->cacheOutdated()){
-			if ( method_exists( MediaWikiServices::class, 'getJobQueueGroup' ) ) {
-				// MW 1.37+
-				$queue_group = MediaWikiServices::getInstance()->getJobQueueGroup();
-			} else {
-				$queue_group = JobQueueGroup::singleton();
-			}
-			$queue_group->push( new ReloadJob("bla",[]));
+			DeferredUpdates::addCallableUpdate(function() use ($store){$store->fetch();},DeferredUpdates::POSTSEND);
 		}
 		
 		$this->getResult()->addValue( null, $this->getModuleName(), $store->getEvents());
