@@ -1,5 +1,8 @@
 <template>
-  <div class="calendar" :class="{ 'is-loading': loading }">
+  <div class="cal-loading-spinner" v-if="loading">
+    <div class="cal-loading-spinner-bounce"></div>
+  </div>
+  <div class="calendar" v-else>
     <div class="header">
       <button class="previousYear" @click="substractOneMonth">&lt;</button>
       <button class="currentPeriod" @click="resetToToday">↺</button>
@@ -190,30 +193,60 @@ export default {
 </script>
 
 <style lang="scss">
-.calendar {
-  position: relative;
-  > * {
-    transition: filter 0.2s ease;
+@keyframes rcfiltersBouncedelay {
+  0%,
+  50%,
+  100% {
+    transform: scale(0.625);
   }
-  &.is-loading {
-    > * {
-      filter: blur(8px);
-    }
-    &::after {
-      filter: none;
-      top: calc(50% - 25px);
-      left: calc(50% - 25px);
-      position: absolute;
-      content: "";
-      border: 10px solid #f3f3f3;
-      border-top: 10px solid #3498db;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 0.5s linear infinite;
-      z-index: 2;
-    }
+
+  20% {
+    opacity: 0.87;
+    transform: scale(1);
   }
+}
+.cal-loading-spinner {
+  /* display:none; */
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  margin-left: -18px;
+  white-space: nowrap;
+
+  .cal-loading-spinner-bounce,
+  &:before,
+  &:after {
+    content: "";
+    background-color: #3366cc;
+    display: block;
+    float: left;
+    width: 12px;
+    height: 12px;
+    border-radius: 100%;
+    -webkit-animation: rcfiltersBouncedelay 1600ms ease-in-out -160ms infinite both;
+    animation: rcfiltersBouncedelay 1600ms ease-in-out -160ms infinite both;
+  }
+
+  &:before {
+    margin-right: 4px;
+    -webkit-animation-delay: -330ms;
+    animation-delay: -330ms;
+  }
+
+  &:after {
+    margin-left: 4px;
+    -webkit-animation-delay: 0s;
+    animation-delay: 0s;
+  }
+}
+
+.body:not(.mw-rcfilters-ui-initialized) .mw-rcfilters-spinner {
+  display: block;
+  margin-top: -153.33333333px;
+}
+
+.body.mw-rcfilters-ui-loading .mw-rcfilters-spinner {
+  display: block;
 }
 
 .days,
