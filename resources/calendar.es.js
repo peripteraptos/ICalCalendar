@@ -369,7 +369,7 @@ function trackEffects(dep, debuggerEventExtraInfo) {
     activeEffect.deps.push(dep);
   }
 }
-function trigger(target, type, key, newValue, oldValue, oldTarget) {
+function trigger$1(target, type, key, newValue, oldValue, oldTarget) {
   const depsMap = targetMap.get(target);
   if (!depsMap) {
     return;
@@ -531,9 +531,9 @@ function createSetter(shallow = false) {
     const result = Reflect.set(target, key, value, receiver);
     if (target === toRaw(receiver)) {
       if (!hadKey) {
-        trigger(target, "add", key, value);
+        trigger$1(target, "add", key, value);
       } else if (hasChanged(value, oldValue)) {
-        trigger(target, "set", key, value);
+        trigger$1(target, "set", key, value);
       }
     }
     return result;
@@ -544,7 +544,7 @@ function deleteProperty(target, key) {
   target[key];
   const result = Reflect.deleteProperty(target, key);
   if (result && hadKey) {
-    trigger(target, "delete", key, void 0);
+    trigger$1(target, "delete", key, void 0);
   }
   return result;
 }
@@ -621,7 +621,7 @@ function add$1(value) {
   const hadKey = proto.has.call(target, value);
   if (!hadKey) {
     target.add(value);
-    trigger(target, "add", value, value);
+    trigger$1(target, "add", value, value);
   }
   return this;
 }
@@ -637,9 +637,9 @@ function set$1(key, value) {
   const oldValue = get2.call(target, key);
   target.set(key, value);
   if (!hadKey) {
-    trigger(target, "add", key, value);
+    trigger$1(target, "add", key, value);
   } else if (hasChanged(value, oldValue)) {
-    trigger(target, "set", key, value);
+    trigger$1(target, "set", key, value);
   }
   return this;
 }
@@ -654,7 +654,7 @@ function deleteEntry(key) {
   get2 ? get2.call(target, key) : void 0;
   const result = target.delete(key);
   if (hadKey) {
-    trigger(target, "delete", key, void 0);
+    trigger$1(target, "delete", key, void 0);
   }
   return result;
 }
@@ -663,7 +663,7 @@ function clear() {
   const hadItems = target.size !== 0;
   const result = target.clear();
   if (hadItems) {
-    trigger(target, "clear", void 0, void 0);
+    trigger$1(target, "clear", void 0, void 0);
   }
   return result;
 }
@@ -2303,7 +2303,7 @@ function updateProps(instance, rawProps, rawPrevProps, optimized) {
     }
   }
   if (hasAttrsChanged) {
-    trigger(instance, "set", "$attrs");
+    trigger$1(instance, "set", "$attrs");
   }
 }
 function setFullProps(instance, rawProps, props, attrs) {
@@ -2528,6 +2528,35 @@ const updateSlots = (instance, children, optimized) => {
     }
   }
 };
+function withDirectives(vnode, directives) {
+  const internalInstance = currentRenderingInstance;
+  if (internalInstance === null) {
+    return vnode;
+  }
+  const instance = internalInstance.proxy;
+  const bindings = vnode.dirs || (vnode.dirs = []);
+  for (let i = 0; i < directives.length; i++) {
+    let [dir, value, arg, modifiers = EMPTY_OBJ] = directives[i];
+    if (isFunction(dir)) {
+      dir = {
+        mounted: dir,
+        updated: dir
+      };
+    }
+    if (dir.deep) {
+      traverse(value);
+    }
+    bindings.push({
+      dir,
+      instance,
+      value,
+      oldValue: void 0,
+      arg,
+      modifiers
+    });
+  }
+  return vnode;
+}
 function invokeDirectiveHook(vnode, prevVNode, instance, name) {
   const bindings = vnode.dirs;
   const oldBindings = prevVNode && prevVNode.dirs;
@@ -4513,6 +4542,75 @@ const DOMTransitionPropsValidators = {
   leaveToClass: String
 };
 /* @__PURE__ */ extend({}, BaseTransition.props, DOMTransitionPropsValidators);
+const getModelAssigner = (vnode) => {
+  const fn = vnode.props["onUpdate:modelValue"];
+  return isArray(fn) ? (value) => invokeArrayFns(fn, value) : fn;
+};
+function onCompositionStart(e) {
+  e.target.composing = true;
+}
+function onCompositionEnd(e) {
+  const target = e.target;
+  if (target.composing) {
+    target.composing = false;
+    trigger(target, "input");
+  }
+}
+function trigger(el, type) {
+  const e = document.createEvent("HTMLEvents");
+  e.initEvent(type, true, true);
+  el.dispatchEvent(e);
+}
+const vModelText = {
+  created(el, { modifiers: { lazy, trim, number } }, vnode) {
+    el._assign = getModelAssigner(vnode);
+    const castToNumber = number || vnode.props && vnode.props.type === "number";
+    addEventListener(el, lazy ? "change" : "input", (e) => {
+      if (e.target.composing)
+        return;
+      let domValue = el.value;
+      if (trim) {
+        domValue = domValue.trim();
+      } else if (castToNumber) {
+        domValue = toNumber(domValue);
+      }
+      el._assign(domValue);
+    });
+    if (trim) {
+      addEventListener(el, "change", () => {
+        el.value = el.value.trim();
+      });
+    }
+    if (!lazy) {
+      addEventListener(el, "compositionstart", onCompositionStart);
+      addEventListener(el, "compositionend", onCompositionEnd);
+      addEventListener(el, "change", onCompositionEnd);
+    }
+  },
+  mounted(el, { value }) {
+    el.value = value == null ? "" : value;
+  },
+  beforeUpdate(el, { value, modifiers: { lazy, trim, number } }, vnode) {
+    el._assign = getModelAssigner(vnode);
+    if (el.composing)
+      return;
+    if (document.activeElement === el) {
+      if (lazy) {
+        return;
+      }
+      if (trim && el.value.trim() === value) {
+        return;
+      }
+      if ((number || el.type === "number") && toNumber(el.value) === value) {
+        return;
+      }
+    }
+    const newValue = value == null ? "" : value;
+    if (el.value !== newValue) {
+      el.value = newValue;
+    }
+  }
+};
 const rendererOptions = extend({ patchProp }, nodeOps);
 let renderer;
 function ensureRenderer() {
@@ -6188,6 +6286,7 @@ const _sfc_main = {
       }),
       dates: [],
       loading: false,
+      searchQuery: "",
       hiddenCalendar: []
     };
   },
@@ -6221,7 +6320,7 @@ const _sfc_main = {
       return [...new Set(this.dates.map((d) => d.type))];
     },
     filteredDates() {
-      return this.dates.filter((e) => !this.hiddenCalendar.includes(e.type));
+      return this.dates.filter((e) => !this.hiddenCalendar.includes(e.type)).filter((e) => e.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
     }
   },
   methods: {
@@ -6286,10 +6385,7 @@ const _hoisted_5 = {
   key: 1,
   class: "calendar"
 };
-const _hoisted_6 = {
-  class: "header",
-  style: { "display": "flex", "justify-content": "space-between" }
-};
+const _hoisted_6 = { class: "header" };
 const _hoisted_7 = { class: "calnav" };
 const _hoisted_8 = { class: "current" };
 const _hoisted_9 = { class: "types" };
@@ -6330,6 +6426,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
             onClick: _cache[2] || (_cache[2] = (...args) => $options.addOneMonth && $options.addOneMonth(...args))
           }, ">"),
           createBaseVNode("span", _hoisted_8, toDisplayString($options.format($data.currentMonth, "MMMM yyyy")), 1)
+        ]),
+        withDirectives(createBaseVNode("input", {
+          type: "text",
+          placeholder: "search events...",
+          class: "search",
+          "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => $data.searchQuery = $event)
+        }, null, 512), [
+          [vModelText, $data.searchQuery]
         ]),
         createBaseVNode("div", _hoisted_9, [
           (openBlock(true), createElementBlock(Fragment, null, renderList($options.calendars, (calendar) => {
