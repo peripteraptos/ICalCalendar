@@ -1,57 +1,60 @@
 <template>
-  <div class="cal-loading-spinner" v-if="loading">
-    <div class="cal-loading-spinner-bounce"></div>
-  </div>
-  <div class="calendar" v-else>
-    <div class="header">
-      <button class="previousYear" @click="substractOneMonth">&lt;</button>
-      <button class="currentPeriod" @click="resetToToday">↺</button>
-      <button class="nextYear" @click="addOneMonth">&gt;</button>
-      <span class="current">
-        {{ format(currentMonth, "MMMM yyyy") }}
-      </span>
+  <div class="mw-ical-calendar">
+    <div class="cal-loading-spinner" v-if="loading">
+      <div class="cal-loading-spinner-bounce"></div>
     </div>
-    <div class="week-days">
-      <p v-for="weekName in weekNames" :key="weekName">{{ weekName }}</p>
-    </div>
-
-    <div class="days">
-      <div v-if="!currentMonthHasEvent" class="noEvents">
-        This month has no events
+    <div class="calendar" v-else>
+      <div class="header">
+        <button class="previousYear" @click="substractOneMonth">&lt;</button>
+        <button class="currentPeriod" @click="resetToToday">↺</button>
+        <button class="nextYear" @click="addOneMonth">&gt;</button>
+        <span class="current">
+          {{ format(currentMonth, "MMMM yyyy") }}
+        </span>
       </div>
-      <div
-        v-for="({ day, events }, index) in daysOfCurrentMonth"
-        :key="day"
-        class="day"
-        :class="{ hasDates: events.length > 0 }"
-        :style="{
-          color: isToday(day) ? 'red' : 'black',
-          'grid-column-start': index === 0 ? weekdayOffset : '0' // basically first-child with a param
-        }"
-      >
-        <div class="dayN">
-          <span class="short">{{ format(day, "dd") }}</span>
-          <span class="long">{{ format(day, "EEEE, dd. MMMM") }}</span>
+      <div class="week-days">
+        <p v-for="weekName in weekNames" :key="weekName">{{ weekName }}</p>
+      </div>
+
+      <div class="days">
+        <div v-if="!currentMonthHasEvent" class="noEvents">
+          This month has no events
         </div>
         <div
-          v-for="(
-            { description, type, startDate, endDate, title }, index
-          ) in events"
-          :key="index"
-          class="event"
-          :class="[{ hasDescription: !!description }, type]"
+          v-for="({ day, events }, index) in daysOfCurrentMonth"
+          :key="day"
+          class="day"
+          :class="{ hasDates: events.length > 0 }"
+          :style="{
+            color: isToday(day) ? 'red' : 'black',
+            'grid-column-start': index === 0 ? weekdayOffset : '0' // basically first-child with a param
+          }"
         >
-          <div class="time">
-            {{ format(startDate, "HH:mm") }}
-            <span class="end"> – {{ format(endDate, "HH:mm") }}</span>
+          <div class="dayN">
+            <span class="short">{{ format(day, "dd") }}</span>
+            <span class="long">{{ format(day, "EEEE, dd. MMMM") }}</span>
           </div>
-          <div>{{ title }}</div>
-          <div class="description" v-if="!!description">
-            <p class="title">{{ title }}</p>
-            <p class="time">
-              {{ format(startDate, "HH:mm") }} – {{ format(endDate, "HH:mm") }}
-            </p>
-            <div v-html="linkify(description)" />
+          <div
+            v-for="(
+              { description, type, startDate, endDate, title }, index
+            ) in events"
+            :key="index"
+            class="event"
+            :class="[{ hasDescription: !!description }, type]"
+          >
+            <div class="time">
+              {{ format(startDate, "HH:mm") }}
+              <span class="end"> – {{ format(endDate, "HH:mm") }}</span>
+            </div>
+            <div>{{ title }}</div>
+            <div class="description" v-if="!!description">
+              <p class="title">{{ title }}</p>
+              <p class="time">
+                {{ format(startDate, "HH:mm") }} –
+                {{ format(endDate, "HH:mm") }}
+              </p>
+              <div v-html="linkify(description)" />
+            </div>
           </div>
         </div>
       </div>
@@ -192,272 +195,275 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-$border-color: #a2a9b1;
-@keyframes rcfiltersBouncedelay {
-  0%,
-  50%,
-  100% {
-    transform: scale(0.625);
-  }
+<style lang="scss">
+.mw-ical-calendar {
+  $border-color: #a2a9b1;
+  @keyframes rcfiltersBouncedelay {
+    0%,
+    50%,
+    100% {
+      transform: scale(0.625);
+    }
 
-  20% {
-    opacity: 0.87;
-    transform: scale(1);
-  }
-}
-.cal-loading-spinner {
-  /* display:none; */
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  margin-left: -18px;
-  white-space: nowrap;
-
-  .cal-loading-spinner-bounce,
-  &:before,
-  &:after {
-    content: "";
-    background-color: #3366cc;
-    display: block;
-    float: left;
-    width: 12px;
-    height: 12px;
-    border-radius: 100%;
-    -webkit-animation: rcfiltersBouncedelay 1600ms ease-in-out -160ms infinite both;
-    animation: rcfiltersBouncedelay 1600ms ease-in-out -160ms infinite both;
-  }
-
-  &:before {
-    margin-right: 4px;
-    -webkit-animation-delay: -330ms;
-    animation-delay: -330ms;
-  }
-
-  &:after {
-    margin-left: 4px;
-    -webkit-animation-delay: 0s;
-    animation-delay: 0s;
-  }
-}
-
-.days,
-.week-days {
-  display: grid;
-
-  grid-template-columns: minmax(0, 1fr);
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.week-days {
-  display: none;
-}
-
-.week-days p,
-.days .dayN {
-  padding: 0.5rem 1rem;
-  margin: 0;
-  font-weight: bold;
-  .short {
-    display: none;
-  }
-}
-.week-days {
-  background: #f8f9fa;
-  border: 1px solid #a2a9b1;
-  border-top: 0;
-  color: black;
-}
-.days {
-  background: #f8f9fa;
-  border: 1px solid #a2a9b1;
-  border-top: 0;
-  border-radius: 0 0 3px 3px;
-  height: 80%;
-}
-
-.day {
-  background: white;
-}
-
-.header {
-  border: 1px solid #a2a9b1;
-  border-radius: 3px 3px 0 0;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 0.75rem 1rem;
-  background: #f8f9fa;
-  color: black;
-  button {
-    background: white;
-    box-shadow: none;
-    border: 1px solid #a2a9b1;
-    border-radius: 3px;
-    color: black;
-    padding: 0.25rem 0.5rem;
-    cursor: pointer;
-    margin-right: 5px;
-  }
-  .current {
-    margin-left: 1rem;
-    font-size: 1.25rem;
-  }
-}
-.event + .event {
-  margin-top: 2px;
-}
-.event {
-  background-color: lightblue;
-  padding: 3px;
-  border-left: 5px solid #0000aa;
-  padding-left: 0.75em;
-  line-height: 1.4;
-  font-size: 0.9em;
-  //border-radius: 5px;
-  position: relative;
-  color: black;
-  .time {
-    //margin-bottom: 0.25em;
-    font-weight: bold;
-    .end {
-      font-size: 90%;
-      font-weight: normal;
+    20% {
+      opacity: 0.87;
+      transform: scale(1);
     }
   }
-  .description {
-    margin-top: 0.25rem;
-    font-size: 90%;
-    .title {
-      font-weight: bold;
-      font-size: 110%;
-      display: none;
-    }
-    .time {
-      display: none;
-      font-size: 90%;
-    }
-    p {
-      padding: 0;
-      margin: 0;
-      margin-bottom: 0.5rem;
-      white-space: pre-wrap;
-    }
-    div {
-      white-space: pre-wrap;
-    }
-  }
-  &.hasDescription {
-    cursor: help;
-  }
-  &.hasDescription:hover .description {
-    display: block;
-  }
-}
-.day:nth-of-type(-n + 7) .event .description {
-  //background-color: blue !important;
-  top: 1rem;
-  bottom: auto;
-}
-.calendar {
-  display: flex;
-  flex-direction: column;
-  > .days {
-    flex-grow: 1;
-  }
-}
+  .cal-loading-spinner {
+    /* display:none; */
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    margin-left: -18px;
+    white-space: nowrap;
 
-.noEvents {
-  text-align: center;
-  padding: 3rem 2rem;
-  font-size: 1.25rem;
-}
-@media screen and (min-width: 1024px) {
+    .cal-loading-spinner-bounce,
+    &:before,
+    &:after {
+      content: "";
+      background-color: #3366cc;
+      display: block;
+      float: left;
+      width: 12px;
+      height: 12px;
+      border-radius: 100%;
+      -webkit-animation: rcfiltersBouncedelay 1600ms ease-in-out -160ms infinite
+        both;
+      animation: rcfiltersBouncedelay 1600ms ease-in-out -160ms infinite both;
+    }
+
+    &:before {
+      margin-right: 4px;
+      -webkit-animation-delay: -330ms;
+      animation-delay: -330ms;
+    }
+
+    &:after {
+      margin-left: 4px;
+      -webkit-animation-delay: 0s;
+      animation-delay: 0s;
+    }
+  }
+
   .days,
   .week-days {
-    grid-gap: 1px;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
+    display: grid;
+
+    grid-template-columns: minmax(0, 1fr);
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .week-days {
-    display: grid;
+    display: none;
   }
 
-  .days {
-    .day {
-      box-shadow: 0 0 0 1px #d9d9d9;
+  .week-days p,
+  .days .dayN {
+    padding: 0.5rem 1rem;
+    margin: 0;
+    font-weight: bold;
+    .short {
+      display: none;
     }
-    .dayN {
-      .short {
-        display: block;
+  }
+  .week-days {
+    background: #f8f9fa;
+    border: 1px solid #a2a9b1;
+    border-top: 0;
+    color: black;
+  }
+  .days {
+    background: #f8f9fa;
+    border: 1px solid #a2a9b1;
+    border-top: 0;
+    border-radius: 0 0 3px 3px;
+    height: 80%;
+  }
+
+  .day {
+    background: white;
+  }
+
+  .header {
+    border: 1px solid #a2a9b1;
+    border-radius: 3px 3px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.75rem 1rem;
+    background: #f8f9fa;
+    color: black;
+    button {
+      background: white;
+      box-shadow: none;
+      border: 1px solid #a2a9b1;
+      border-radius: 3px;
+      color: black;
+      padding: 0.25rem 0.5rem;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+    .current {
+      margin-left: 1rem;
+      font-size: 1.25rem;
+    }
+  }
+  .event + .event {
+    margin-top: 2px;
+  }
+  .event {
+    background-color: lightblue;
+    padding: 3px;
+    border-left: 5px solid #0000aa;
+    padding-left: 0.75em;
+    line-height: 1.4;
+    font-size: 0.9em;
+    //border-radius: 5px;
+    position: relative;
+    color: black;
+    .time {
+      //margin-bottom: 0.25em;
+      font-weight: bold;
+      .end {
+        font-size: 90%;
+        font-weight: normal;
       }
-      .long {
+    }
+    .description {
+      margin-top: 0.25rem;
+      font-size: 90%;
+      .title {
+        font-weight: bold;
+        font-size: 110%;
         display: none;
       }
+      .time {
+        display: none;
+        font-size: 90%;
+      }
+      p {
+        padding: 0;
+        margin: 0;
+        margin-bottom: 0.5rem;
+        white-space: pre-wrap;
+      }
+      div {
+        white-space: pre-wrap;
+      }
+    }
+    &.hasDescription {
+      cursor: help;
+    }
+    &.hasDescription:hover .description {
+      display: block;
+    }
+  }
+  .day:nth-of-type(-n + 7) .event .description {
+    //background-color: blue !important;
+    top: 1rem;
+    bottom: auto;
+  }
+  .calendar {
+    display: flex;
+    flex-direction: column;
+    > .days {
+      flex-grow: 1;
     }
   }
 
-  .event {
-    .description {
-      .time,
-      .title {
-        display: block;
-      }
-      bottom: 1rem;
-      display: none;
-      position: absolute;
-      z-index: 1;
-      background: white;
-      padding: 1rem;
-      border: 1px solid black;
-
-      a {
-        display: inline-block;
-        white-space: nowrap;
-        max-width: 170px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 1;
-        vertical-align: text-bottom;
-      }
-    }
-  }
   .noEvents {
-    display: none;
+    text-align: center;
+    padding: 3rem 2rem;
+    font-size: 1.25rem;
   }
-}
+  @media screen and (min-width: 1024px) {
+    .days,
+    .week-days {
+      grid-gap: 1px;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+    .week-days {
+      display: grid;
+    }
 
-@media screen and (max-width: 1024px) {
-  .day {
-    grid-column-start: unset !important;
-  }
-  .day:not(.hasDates) {
-    display: none;
-  }
+    .days {
+      .day {
+        box-shadow: 0 0 0 1px #d9d9d9;
+      }
+      .dayN {
+        .short {
+          display: block;
+        }
+        .long {
+          display: none;
+        }
+      }
+    }
 
-  .event {
-    .description {
-      position: ab;
+    .event {
+      .description {
+        .time,
+        .title {
+          display: block;
+        }
+        bottom: 1rem;
+        display: none;
+        position: absolute;
+        z-index: 1;
+        background: white;
+        padding: 1rem;
+        border: 1px solid black;
+
+        a {
+          display: inline-block;
+          white-space: nowrap;
+          max-width: 170px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          line-height: 1;
+          vertical-align: text-bottom;
+        }
+      }
+    }
+    .noEvents {
+      display: none;
     }
   }
-}
 
-.event.RoomSchedule {
-  border-color: orange;
-  background-color: lightyellow;
-}
+  @media screen and (max-width: 1024px) {
+    .day {
+      grid-column-start: unset !important;
+    }
+    .day:not(.hasDates) {
+      display: none;
+    }
 
-.event.KeyDates {
-  border-color: blue;
-  background-color: lightblue;
-}
+    .event {
+      .description {
+        position: ab;
+      }
+    }
+  }
 
-.event.Curriculum {
-  border-color: green;
-  background-color: lightgreen;
-}
+  .event.RoomSchedule {
+    border-color: orange;
+    background-color: lightyellow;
+  }
 
-.event.Lectures {
-  border-color: yellow;
-  background-color: rgb(255, 255, 220);
+  .event.KeyDates {
+    border-color: blue;
+    background-color: lightblue;
+  }
+
+  .event.Curriculum {
+    border-color: green;
+    background-color: lightgreen;
+  }
+
+  .event.Lectures {
+    border-color: yellow;
+    background-color: rgb(255, 255, 220);
+  }
 }
 </style>
