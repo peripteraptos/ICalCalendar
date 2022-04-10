@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar">
+  <div class="calendar" :class="{ 'is-loading': loading }">
     <div class="header">
       <button class="previousYear" @click="substractOneMonth">&lt;</button>
       <button class="currentPeriod" @click="resetToToday">↺</button>
@@ -88,7 +88,8 @@ export default {
         locale: en,
         weekStartsOn: 1 // monday
       }),
-      dates: []
+      dates: [],
+      loading: false
     };
   },
   directives: {},
@@ -136,6 +137,7 @@ export default {
       this.currentMonth = startOfMonth(new Date());
     },
     fetchDates() {
+      this.loading = true;
       fetch(API_URL)
         .then(res => res.json())
         .then(
@@ -147,7 +149,10 @@ export default {
                 endDate: parseJSON(d.endDate)
               };
             }))
-        );
+        )
+        .then(() => {
+          this.loading = false;
+        });
     },
     linkify(string) {
       // http://, https://, ftp://
@@ -185,6 +190,32 @@ export default {
 </script>
 
 <style lang="scss">
+.calendar {
+  position: relative;
+  > * {
+    transition: filter 0.2s ease;
+  }
+  &.is-loading {
+    > * {
+      filter: blur(8px);
+    }
+    &::after {
+      filter: none;
+      top: 50%;
+      left: calc(50% - 50px);
+      position: absolute;
+      content: "";
+      border: 10px solid #f3f3f3;
+      border-top: 10px solid #3498db;
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      animation: spin 0.5s linear infinite;
+      z-index: 2;
+    }
+  }
+}
+
 .days,
 .week-days {
   display: grid;
