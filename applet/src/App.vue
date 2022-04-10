@@ -244,7 +244,7 @@ $border-color: #a2a9b1;
 .days,
 .week-days {
   display: grid;
-  grid-gap: 1px;
+
   grid-template-columns: minmax(0, 1fr);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -278,7 +278,6 @@ $border-color: #a2a9b1;
 
 .day {
   background: white;
-  box-shadow: 0 0 0 1px #d9d9d9;
 }
 
 .header {
@@ -304,15 +303,17 @@ $border-color: #a2a9b1;
     font-size: 1.25rem;
   }
 }
+.event + .event {
+  margin-top: 2px;
+}
 .event {
   background-color: lightblue;
   padding: 3px;
   border-left: 5px solid #0000aa;
-  padding-left: 1em;
-  line-height: 1.5;
+  padding-left: 0.75em;
+  line-height: 1.4;
   font-size: 0.9em;
   //border-radius: 5px;
-  margin-bottom: 2px;
   position: relative;
   color: black;
   .time {
@@ -373,6 +374,7 @@ $border-color: #a2a9b1;
 @media screen and (min-width: 1024px) {
   .days,
   .week-days {
+    grid-gap: 1px;
     grid-template-columns: repeat(7, minmax(0, 1fr));
   }
   .week-days {
@@ -380,6 +382,9 @@ $border-color: #a2a9b1;
   }
 
   .days {
+    .day {
+      box-shadow: 0 0 0 1px #d9d9d9;
+    }
     .dayN {
       .short {
         display: block;
