@@ -41,7 +41,7 @@ class CalendarStore {
     }
 
     public function cacheOutdated(){
-        return time()-filemtime($this->getCacheFilePath()) < 2 * self::CACHE_SECONDS;
+        return time()-filemtime($this->getCacheFilePath()) > self::CACHE_SECONDS;
     }
 
     public function cacheExists(){
