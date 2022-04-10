@@ -4,7 +4,7 @@
       <div class="cal-loading-spinner-bounce"></div>
     </div>
     <div class="calendar" v-else>
-      <div class="header" style="display: flex; justify-content: space-between">
+      <div class="header">
         <div class="calnav">
           <button class="previousYear" @click="substractOneMonth">&lt;</button>
           <button class="currentPeriod" @click="resetToToday">↺</button>
@@ -13,6 +13,12 @@
             {{ format(currentMonth, "MMMM yyyy") }}
           </span>
         </div>
+        <input
+          type="text"
+          placeholder="search events..."
+          class="search"
+          v-model="searchQuery"
+        />
         <div class="types">
           <button
             v-for="calendar in calendars"
@@ -111,6 +117,7 @@ export default {
       }),
       dates: [],
       loading: false,
+      searchQuery: "",
       hiddenCalendar: []
     };
   },
@@ -148,7 +155,11 @@ export default {
       return [...new Set(this.dates.map(d => d.type))];
     },
     filteredDates() {
-      return this.dates.filter(e => !this.hiddenCalendar.includes(e.type));
+      return this.dates
+        .filter(e => !this.hiddenCalendar.includes(e.type))
+        .filter(e =>
+          e.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
     }
   },
   methods: {
@@ -316,6 +327,8 @@ export default {
   .header {
     border: 1px solid #a2a9b1;
     border-radius: 3px 3px 0 0;
+    flex-wrap: wrap;
+    gap: 0.75em;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -326,8 +339,17 @@ export default {
       button {
         background: white;
       }
+      margin-right: 1rem;
     }
-    button {
+
+    input.search {
+      flex-grow: 1;
+      //max-width: 400px;
+      //margin: 0 2em;
+    }
+
+    button,
+    input {
       box-shadow: none;
       border: 1px solid #a2a9b1;
       border-radius: 3px;
@@ -339,6 +361,7 @@ export default {
     .current {
       margin-left: 1rem;
       font-size: 1.25rem;
+      vertical-align: middle;
     }
   }
   .event + .event {
@@ -410,13 +433,7 @@ export default {
     font-size: 1.25rem;
   }
 
-  .types {
-    display: none;
-  }
   @media screen and (min-width: 1024px) {
-    .types {
-      display: block;
-    }
     .days,
     .week-days {
       grid-gap: 1px;
