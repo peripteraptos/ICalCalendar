@@ -201,15 +201,15 @@ export default {
     }
     &::after {
       filter: none;
-      top: 50%;
-      left: calc(50% - 50px);
+      top: calc(50% - 25px);
+      left: calc(50% - 25px);
       position: absolute;
       content: "";
       border: 10px solid #f3f3f3;
       border-top: 10px solid #3498db;
       border-radius: 50%;
-      width: 100px;
-      height: 100px;
+      width: 50px;
+      height: 50px;
       animation: spin 0.5s linear infinite;
       z-index: 2;
     }
