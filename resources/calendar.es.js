@@ -6286,7 +6286,7 @@ const _sfc_main = {
       }),
       dates: [],
       loading: false,
-      searchQuery: new URL(location.href).hash.substr(1),
+      searchQuery: new URL(location.href).hash.substr(1).replace("_", " "),
       hiddenCalendar: []
     };
   },
