@@ -118,7 +118,7 @@ export default {
       dates: [],
       loading: false,
       searchQuery: decodeURI(
-        new URL(location.href).hash.substr(1).replace("_", " ")
+        new URL(location.href).hash.substr(1).replaceAll("_", " ")
       ),
       hiddenCalendar: []
     };
