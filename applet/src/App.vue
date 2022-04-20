@@ -117,7 +117,9 @@ export default {
       }),
       dates: [],
       loading: false,
-      searchQuery: new URL(location.href).hash.substr(1).replace("_", " "),
+      searchQuery: decodeURI(
+        new URL(location.href).hash.substr(1).replace("_", " ")
+      ),
       hiddenCalendar: []
     };
   },
