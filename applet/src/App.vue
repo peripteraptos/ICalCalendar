@@ -117,7 +117,7 @@ export default {
       }),
       dates: [],
       loading: false,
-      searchQuery: "",
+      searchQuery: new URL(location.href).searchParams.get("calquery") || "",
       hiddenCalendar: []
     };
   },
