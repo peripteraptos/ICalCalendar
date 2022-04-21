@@ -57,15 +57,35 @@
           </div>
           <div
             v-for="(
-              { description, type, startDate, endDate, title }, index
+              {
+                description,
+                type,
+                startDate,
+                endDate,
+                title,
+                isMultiDay,
+                isFirstDay,
+                isLastDay
+              },
+              index
             ) in events"
             :key="index"
             class="event"
             :class="[{ hasDescription: !!description }, type.replace(' ', '_')]"
           >
             <div class="time">
-              {{ format(startDate, "HH:mm") }}
-              <span class="end"> – {{ format(endDate, "HH:mm") }}</span>
+              <template v-if="isMultiDay && !isFirstDay && !isLastDay">
+                ➝
+              </template>
+              <template v-if="!isMultiDay || isFirstDay">{{
+                format(startDate, "HH:mm")
+              }}</template>
+              <span
+                :class="{ end: !isMultiDay }"
+                v-if="!isMultiDay || isLastDay"
+              >
+                – {{ format(endDate, "HH:mm") }}</span
+              >
             </div>
             <div>{{ title }}</div>
             <div class="description" v-if="!!description">
@@ -96,7 +116,10 @@ import {
   eachDayOfInterval,
   getDay,
   isToday,
+  differenceInCalendarDays,
   isSameDay,
+  endOfDay,
+  startOfDay,
   parseJSON
 } from "date-fns";
 import en from "date-fns/locale/en-US";
@@ -157,11 +180,41 @@ export default {
       return [...new Set(this.dates.map(d => d.type))];
     },
     filteredDates() {
-      return this.dates
+      return this.spreadMultidayDates
         .filter(e => !this.hiddenCalendar.includes(e.type))
         .filter(e =>
           e.title.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
+        )
+        .slice()
+        .sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+    },
+    spreadMultidayDates() {
+      return this.dates.reduce((p, c) => {
+        const daydiff = differenceInCalendarDays(c.endDate, c.startDate);
+        const isMultiDay = daydiff !== 0;
+        if (!isMultiDay) return [...p, { ...c, isMultiDay }];
+        let dates = [];
+        for (let i = 0; i < daydiff; i++) {
+          let isFirstDay = i == 0;
+          let isLastDay = i == daydiff - 1;
+          let startDate = isFirstDay
+            ? c.startDate
+            : startOfDay(addDays(c.startDate, i));
+          let endDate = isLastDay
+            ? c.endDate
+            : endOfDay(addDays(c.startDate, i));
+          console.log(startDate, endDate);
+          dates.push({
+            ...c,
+            startDate,
+            endDate,
+            isMultiDay,
+            isFirstDay,
+            isLastDay
+          });
+        }
+        return [...p, ...dates];
+      }, []);
     }
   },
   methods: {

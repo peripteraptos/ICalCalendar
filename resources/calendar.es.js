@@ -4762,6 +4762,15 @@ function startOfDay(dirtyDate) {
   date.setHours(0, 0, 0, 0);
   return date;
 }
+var MILLISECONDS_IN_DAY$1 = 864e5;
+function differenceInCalendarDays(dirtyDateLeft, dirtyDateRight) {
+  requiredArgs(2, arguments);
+  var startOfDayLeft = startOfDay(dirtyDateLeft);
+  var startOfDayRight = startOfDay(dirtyDateRight);
+  var timestampLeft = startOfDayLeft.getTime() - getTimezoneOffsetInMilliseconds(startOfDayLeft);
+  var timestampRight = startOfDayRight.getTime() - getTimezoneOffsetInMilliseconds(startOfDayRight);
+  return Math.round((timestampLeft - timestampRight) / MILLISECONDS_IN_DAY$1);
+}
 function isSameDay(dirtyDateLeft, dirtyDateRight) {
   requiredArgs(2, arguments);
   var dateLeftStartOfDay = startOfDay(dirtyDateLeft);
@@ -4779,6 +4788,12 @@ function isValid(dirtyDate) {
   }
   var date = toDate(dirtyDate);
   return !isNaN(Number(date));
+}
+function endOfDay(dirtyDate) {
+  requiredArgs(1, arguments);
+  var date = toDate(dirtyDate);
+  date.setHours(23, 59, 59, 999);
+  return date;
 }
 function eachDayOfInterval(dirtyInterval, options) {
   requiredArgs(1, arguments);
@@ -6320,7 +6335,31 @@ const _sfc_main = {
       return [...new Set(this.dates.map((d) => d.type))];
     },
     filteredDates() {
-      return this.dates.filter((e) => !this.hiddenCalendar.includes(e.type)).filter((e) => e.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
+      return this.spreadMultidayDates.filter((e) => !this.hiddenCalendar.includes(e.type)).filter((e) => e.title.toLowerCase().includes(this.searchQuery.toLowerCase())).slice().sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+    },
+    spreadMultidayDates() {
+      return this.dates.reduce((p2, c) => {
+        const daydiff = differenceInCalendarDays(c.endDate, c.startDate);
+        const isMultiDay = daydiff !== 0;
+        if (!isMultiDay)
+          return [...p2, __spreadProps(__spreadValues({}, c), { isMultiDay })];
+        let dates = [];
+        for (let i = 0; i < daydiff; i++) {
+          let isFirstDay = i == 0;
+          let isLastDay = i == daydiff - 1;
+          let startDate = isFirstDay ? c.startDate : startOfDay(addDays(c.startDate, i));
+          let endDate = isLastDay ? c.endDate : endOfDay(addDays(c.startDate, i));
+          console.log(startDate, endDate);
+          dates.push(__spreadProps(__spreadValues({}, c), {
+            startDate,
+            endDate,
+            isMultiDay,
+            isFirstDay,
+            isLastDay
+          }));
+        }
+        return [...p2, ...dates];
+      }, []);
     }
   },
   methods: {
@@ -6400,7 +6439,7 @@ const _hoisted_14 = { class: "dayN" };
 const _hoisted_15 = { class: "short" };
 const _hoisted_16 = { class: "long" };
 const _hoisted_17 = { class: "time" };
-const _hoisted_18 = { class: "end" };
+const _hoisted_18 = /* @__PURE__ */ createTextVNode(" \u279D ");
 const _hoisted_19 = {
   key: 0,
   class: "description"
@@ -6468,14 +6507,31 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
               createBaseVNode("span", _hoisted_15, toDisplayString($options.format(day, "dd")), 1),
               createBaseVNode("span", _hoisted_16, toDisplayString($options.format(day, "EEEE, dd. MMMM")), 1)
             ]),
-            (openBlock(true), createElementBlock(Fragment, null, renderList(events, ({ description, type, startDate, endDate, title }, index2) => {
+            (openBlock(true), createElementBlock(Fragment, null, renderList(events, ({
+              description,
+              type,
+              startDate,
+              endDate,
+              title,
+              isMultiDay,
+              isFirstDay,
+              isLastDay
+            }, index2) => {
               return openBlock(), createElementBlock("div", {
                 key: index2,
                 class: normalizeClass(["event", [{ hasDescription: !!description }, type.replace(" ", "_")]])
               }, [
                 createBaseVNode("div", _hoisted_17, [
-                  createTextVNode(toDisplayString($options.format(startDate, "HH:mm")) + " ", 1),
-                  createBaseVNode("span", _hoisted_18, " \u2013 " + toDisplayString($options.format(endDate, "HH:mm")), 1)
+                  isMultiDay && !isFirstDay && !isLastDay ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+                    _hoisted_18
+                  ], 64)) : createCommentVNode("", true),
+                  !isMultiDay || isFirstDay ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [
+                    createTextVNode(toDisplayString($options.format(startDate, "HH:mm")), 1)
+                  ], 64)) : createCommentVNode("", true),
+                  !isMultiDay || isLastDay ? (openBlock(), createElementBlock("span", {
+                    key: 2,
+                    class: normalizeClass({ end: !isMultiDay })
+                  }, " \u2013 " + toDisplayString($options.format(endDate, "HH:mm")), 3)) : createCommentVNode("", true)
                 ]),
                 createBaseVNode("div", null, toDisplayString(title), 1),
                 !!description ? (openBlock(), createElementBlock("div", _hoisted_19, [
