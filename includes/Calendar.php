@@ -23,7 +23,7 @@ class Calendar{
 			'skipRecurrence'              => false, // Default value
 		));
 	      // $ical->initFile('ICal.ics');
-	       $this->ical->initUrl($url);
+	       $this->ical->initUrl($url, null, null, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:53.0) Gecko/20100101 Firefox/53.0');
 	}
 
 	public function toJson(){
