@@ -488,7 +488,7 @@ export default {
     display: flex;
     flex-direction: column;
     > .days {
-      flex-grow: 1;
+      //flex-grow: 1;
     }
   }
 
