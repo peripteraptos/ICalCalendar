@@ -372,7 +372,7 @@ export default {
     border: 1px solid #a2a9b1;
     border-top: 0;
     border-radius: 0 0 3px 3px;
-    height: 80%;
+    //height: 80%;
   }
 
   .day {
