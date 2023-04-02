@@ -23,9 +23,8 @@ class CalendarLua extends \Scribunto_LuaLibraryBase {
 
     public function calendarQuery()
 	{
-		$store = new CalendarStore();
-		$events = $store->getEvents();
-		
-        return [1,2,3,4,5,[1=>2,3=>4]];
+		$store = new CalendarStore();	
+			
+        return [$store->getEvents()];
     }
 }
