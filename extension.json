@@ -16,7 +16,8 @@
   },
   "Hooks": {
     "ParserFirstCallInit": "handleHooks",
-    "BeforePageDisplay": "handleHooks"
+    "BeforePageDisplay": "handleHooks",
+    "ScribuntoExternalLibraries": "handleHooks"
   },
   "HookHandlers": {
     "handleHooks": {

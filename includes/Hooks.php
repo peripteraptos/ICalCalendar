@@ -38,6 +38,10 @@ class Hooks implements
 	}
 
 
+	public static function onScribuntoExternalLibraries( $engine, &$extraLibraries ) {
+		$extraLibraries['mw.ext.calendar'] = CalendarLua::class;
+	}
+
 	/**
 	 * Parser function handler for {{#showme: .. | .. }}
 	 *
