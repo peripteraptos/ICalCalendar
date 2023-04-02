@@ -38,7 +38,7 @@ class CalendarStore {
     }
 
     public function loadCache(){
-        return $this->events = json_decode(file_get_contents($this->getCacheFilePath()));
+        return $this->events = json_decode(file_get_contents($this->getCacheFilePath()),true);
     }
 
     public function cacheOutdated(){
