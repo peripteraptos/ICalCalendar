@@ -23,8 +23,6 @@ class CalendarLua extends \Scribunto_LuaLibraryBase {
 
     public function calendarQuery(){
 
-        return [
-            ["name" => "test123", "id" => 123]
-        ];
+        return (new CalendarStore())->getEvents();
     }
 }
