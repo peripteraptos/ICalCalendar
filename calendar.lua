@@ -20,8 +20,8 @@ function calendar.setupInterface( options )
     package.loaded['mw.ext.calendar'] = calendar
 end
 
-function calendar.query(tables, fields, args)
-    return php.query(tables, fields, args)
+function calendar.query()
+    return php.query()
 end
 
 return calendar
