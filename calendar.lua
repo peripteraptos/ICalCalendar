@@ -3,7 +3,7 @@ local php
 
 function calendar.setupInterface( options )
     -- Remove setup function
-    cargo.setupInterface = nil
+    calendar.setupInterface = nil
 
     -- Copy the PHP callbacks to a local variable, and remove the global
     php = mw_interface
