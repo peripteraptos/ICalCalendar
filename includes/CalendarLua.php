@@ -21,8 +21,8 @@ class CalendarLua extends \Scribunto_LuaLibraryBase {
 		return $this->getEngine()->registerInterface( __DIR__ . '/../calendar.lua', $lib, [] );
 	}
 
-    public function calendarQuery(){
+    public function calendarQuery(): array{
 
-        return (new CalendarStore())->getEvents();
+        return [...(new CalendarStore())->getEvents()];
     }
 }
