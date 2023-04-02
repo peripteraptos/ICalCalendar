@@ -8,17 +8,17 @@ namespace MediaWiki\Extension\ICalCalendar;
  * @author Yaron Koren.
  * @author Alexander Mashin.
  */
-class CalendarLua extends Scribunto_LuaLibraryBase {
+class CalendarLua extends \Scribunto_LuaLibraryBase {
 
 	/**
 	 * Register two Lua bindings: mw.ext.cargo.query and mw.ext.cargo.format
 	 * @return array|null
-	 */
+	 */	
 	public function register() {
 		$lib = [
 			'query' => [ $this, 'calendarQuery' ],
 		];
-		return $this->getEngine()->registerInterface( __DIR__ . '/../cargo.lua', $lib, [] );
+		return $this->getEngine()->registerInterface( __DIR__ . '/../calendar.lua', $lib, [] );
 	}
 
     public function calendarQuery(){
