@@ -3,5 +3,19 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "Benedikt Ackermann <benacke@gmail.com>",
-  "license": "MIT"
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "date-fns": "^3.6.0",
+    "vue": "^3.4.31"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "sass": "^1.77.8",
+    "vite": "^5.3.3"
+  }
 }

@@ -128,7 +128,7 @@ const API_URL =
   typeof mw !== "undefined"
     ? mw.config.values.wgScriptPath +
       "/api.php?action=query&format=json&prop=&list=calendar"
-    : "/calendar.json";
+    : null;
 
 export default {
   data() {

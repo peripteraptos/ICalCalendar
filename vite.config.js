@@ -6,7 +6,7 @@ import vue from "@vitejs/plugin-vue";
 export default defineConfig({
   plugins: [vue()],
   build: {
-    outDir: "../resources",
+    outDir: "resources",
     lib: {
       entry: path.resolve(__dirname, "src/main.js"),
       name: "CalendarApplet",
