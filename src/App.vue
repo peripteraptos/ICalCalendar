@@ -104,26 +104,178 @@
 </template>
 
 <script>
-import {
-  startOfMonth,
-  addMonths,
-  format,
-  subMonths,
-  addDays,
-  startOfWeek,
-  sub,
-  add,
-  eachDayOfInterval,
-  getDay,
-  isToday,
-  differenceInCalendarDays,
-  isSameDay,
-  endOfDay,
-  startOfDay,
-  parseJSON
-} from "date-fns";
-import en from "date-fns/locale/en-US";
+// Get the start of the month for a given date
+function startOfMonth(date) {
+  const newDate = new Date(date);
+  newDate.setDate(1);
+  newDate.setHours(0, 0, 0, 0);
+  return newDate;
+}
 
+// Add a specified number of months to a date
+function addMonths(date, months) {
+  const newDate = new Date(date);
+  newDate.setMonth(newDate.getMonth() + months);
+  return newDate;
+}
+
+// Subtract a specified number of months from a date
+function subMonths(date, months) {
+  return addMonths(date, -months);
+}
+
+// Add a specified number of days to a date
+function addDays(date, days) {
+  const newDate = new Date(date);
+  newDate.setDate(newDate.getDate() + days);
+  return newDate;
+}
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
+
+const dayNames = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday"
+];
+
+function format(date, formatStr) {
+  const d = new Date(date);
+
+  const map = {
+    MMMM: monthNames[d.getMonth()],
+    yyyy: d.getFullYear(),
+    dd: String(d.getDate()).padStart(2, "0"),
+    EEEE: dayNames[d.getDay()],
+    MMM: monthNames[d.getMonth()].substr(0, 3),
+    MM: String(d.getMonth() + 1).padStart(2, "0"),
+    yy: String(d.getFullYear()).substr(2),
+    HH: String(d.getHours()).padStart(2, "0"),
+    mm: String(d.getMinutes()).padStart(2, "0"),
+    ss: String(d.getSeconds()).padStart(2, "0")
+  };
+
+  return formatStr.replace(
+    /MMMM|yyyy|dd|EEEE|MMM|MM|yy|HH|mm|ss/g,
+    match => map[match]
+  );
+}
+
+// Get the start of the week for a given date
+function startOfWeek(date, weekStartsOn = 7) {
+  const newDate = new Date(date);
+  const day = newDate.getDay();
+  const diff = (day < weekStartsOn ? 7 : 0) + day - weekStartsOn;
+  newDate.setDate(newDate.getDate() - diff);
+  newDate.setHours(0, 0, 0, 0);
+  return newDate;
+}
+
+// Subtract a specified duration from a date
+function sub(date, { days = 0, months = 0 }) {
+  let newDate = new Date(date);
+  if (days) {
+    newDate = addDays(newDate, -days);
+  }
+  if (months) {
+    newDate = subMonths(newDate, months);
+  }
+  return newDate;
+}
+
+// Add a specified duration to a date
+function add(date, { days = 0, months = 0 }) {
+  let newDate = new Date(date);
+  if (days) {
+    newDate = addDays(newDate, days);
+  }
+  if (months) {
+    newDate = addMonths(newDate, months);
+  }
+  return newDate;
+}
+
+// Get each day of an interval between two dates
+function eachDayOfInterval({ start, end }) {
+  const interval = [];
+  let currentDate = new Date(start);
+  const endDate = new Date(end);
+  while (currentDate <= endDate) {
+    interval.push(new Date(currentDate));
+    currentDate = addDays(currentDate, 1);
+  }
+  return interval;
+}
+
+// Get the day of the week for a given date
+function getDay(date) {
+  return new Date(date).getDay();
+}
+
+// Check if a given date is today
+function isToday(date) {
+  const today = new Date();
+  const givenDate = new Date(date);
+  return (
+    today.getDate() === givenDate.getDate() &&
+    today.getMonth() === givenDate.getMonth() &&
+    today.getFullYear() === givenDate.getFullYear()
+  );
+}
+
+// Get the difference in calendar days between two dates
+function differenceInCalendarDays(dateLeft, dateRight) {
+  const startOfDayLeft = startOfDay(dateLeft);
+  const startOfDayRight = startOfDay(dateRight);
+  const timeDiff = startOfDayLeft - startOfDayRight;
+  return Math.round(timeDiff / (1000 * 60 * 60 * 24));
+}
+
+// Check if two dates are the same day
+function isSameDay(dateLeft, dateRight) {
+  const left = new Date(dateLeft);
+  const right = new Date(dateRight);
+  return (
+    left.getDate() === right.getDate() &&
+    left.getMonth() === right.getMonth() &&
+    left.getFullYear() === right.getFullYear()
+  );
+}
+
+// Get the end of the day for a given date
+function endOfDay(date) {
+  const newDate = new Date(date);
+  newDate.setHours(23, 59, 59, 999);
+  return newDate;
+}
+
+// Get the start of the day for a given date
+function startOfDay(date) {
+  const newDate = new Date(date);
+  newDate.setHours(0, 0, 0, 0);
+  return newDate;
+}
+
+// Parse a JSON date string into a Date object
+function parseJSON(dateString) {
+  return new Date(dateString);
+}
 const API_URL =
   typeof mw !== "undefined"
     ? mw.config.values.wgScriptPath +
@@ -134,10 +286,7 @@ export default {
   data() {
     return {
       currentMonth: startOfMonth(new Date()),
-      firstDayOfWeek: startOfWeek(new Date(), {
-        locale: en,
-        weekStartsOn: 1 // monday
-      }),
+      firstDayOfWeek: startOfWeek(new Date()),
       dates: [],
       loading: false,
       searchQuery: decodeURI(
