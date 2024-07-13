@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     outDir: "resources",
+    emptyOutDir: true,
     lib: {
       entry: path.resolve(__dirname, "src/main.js"),
       name: "CalendarApplet",
