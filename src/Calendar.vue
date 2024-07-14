@@ -24,10 +24,10 @@
             v-for="calendar in calendars"
             :key="calendar"
             @click="toggleCalendar(calendar)"
-            :class="[
-              { 'has-low-opacity': hiddenCalendar.includes(calendar) },
-              calendar.replace(' ', '_')
-            ]"
+            :style="{
+              backgroundColor: this.categories[calendar] + '3f'
+            }"
+            :class="{ 'has-low-opacity': hiddenCalendar.includes(calendar) }"
           >
             {{ calendar }}
           </button>
@@ -71,7 +71,11 @@
             ) in events"
             :key="index"
             class="event"
-            :class="[{ hasDescription: !!description }, type.replace(' ', '_')]"
+            :style="{
+              borderColor: this.categories[type],
+              backgroundColor: this.categories[type] + '1f'
+            }"
+            :class="[{ hasDescription: !!description }]"
           >
             <div class="time">
               <template v-if="isMultiDay && !isFirstDay && !isLastDay">
@@ -288,6 +292,8 @@ module.exports = exports = {
       currentMonth: startOfMonth(new Date()),
       firstDayOfWeek: startOfWeek(new Date()),
       dates: [],
+      categories: {},
+      validUntil: null,
       loading: false,
       searchQuery: decodeURI(
         new URL(location.href).hash.substr(1).replaceAll("_", " ")
@@ -296,6 +302,7 @@ module.exports = exports = {
     };
   },
   directives: {},
+  mounted() {},
   computed: {
     previousMonth() {
       return startOfMonth(subMonths(new Date(this.currentMonth), 1));
@@ -387,16 +394,15 @@ module.exports = exports = {
       this.loading = true;
       fetch(API_URL)
         .then(res => res.json())
-        .then(
-          d =>
-            (this.dates = d.calendar.map(d => {
-              return {
-                ...d,
-                startDate: parseJSON(d.startDate),
-                endDate: parseJSON(d.endDate)
-              };
-            }))
-        )
+        .then(d => {
+          this.dates = d.calendar.map(d => ({
+            ...d,
+            startDate: parseJSON(d.startDate),
+            endDate: parseJSON(d.endDate)
+          }));
+          this.validUntil = d.validUntil;
+          this.categories = d.categories;
+        })
         .then(() => {
           this.loading = false;
         });
@@ -448,12 +454,19 @@ module.exports = exports = {
     transform: scale(1);
   }
 }
+.mw-ical-calendar {
+  position: relative;
+  min-height: 200px;
+}
 .mw-ical-calendar .cal-loading-spinner {
   /* display:none;
 	 */
+  background-color: #f8f9fa;
   position: absolute;
-  top: 40%;
-  left: 50%;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-left: -18px;
   white-space: nowrap;
 }
@@ -519,7 +532,7 @@ module.exports = exports = {
   border: 1px solid #a2a9b1;
   border-radius: 3px 3px 0 0;
   flex-wrap: wrap;
-  gap: 1em 3em;
+  gap: 1rem 3rem;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -532,9 +545,12 @@ module.exports = exports = {
   margin-right: 5px;
 }
 .mw-ical-calendar .header .types {
-  gap: 0.5em;
+  gap: 0.5rem;
   display: flex;
   flex-wrap: wrap;
+}
+.mw-ical-calendar .header .types button {
+  border-color: transparent;
 }
 .mw-ical-calendar .header input.search {
   flex-grow: 1;
@@ -544,8 +560,9 @@ module.exports = exports = {
   box-shadow: none;
   border: 1px solid #a2a9b1;
   border-radius: 3px;
+  font-size: 1rem;
   color: black;
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 0.6rem;
 }
 .mw-ical-calendar .header button {
   cursor: pointer;
@@ -562,9 +579,9 @@ module.exports = exports = {
   background-color: lightblue;
   padding: 3px;
   border-left: 5px solid #00a;
-  padding-left: 0.75em;
+  padding-left: 0.75rem;
   line-height: 1.4;
-  font-size: 0.9em;
+  font-size: 0.8rem;
   word-break: break-word;
   position: relative;
   color: black;
@@ -573,21 +590,18 @@ module.exports = exports = {
   font-weight: bold;
 }
 .mw-ical-calendar .event .time .end {
-  font-size: 90%;
   font-weight: normal;
 }
 .mw-ical-calendar .event .description {
   margin-top: 0.25rem;
-  font-size: 90%;
 }
 .mw-ical-calendar .event .description .title {
   font-weight: bold;
-  font-size: 110%;
+
   display: none;
 }
 .mw-ical-calendar .event .description .time {
   display: none;
-  font-size: 90%;
 }
 .mw-ical-calendar .event .description p {
   padding: 0;
@@ -676,19 +690,19 @@ module.exports = exports = {
   }
 }
 .mw-ical-calendar .Room_schedule {
-  border-color: orange;
+  border-color: #ffa500;
   background-color: lightyellow;
 }
 .mw-ical-calendar .Key_dates {
-  border-color: blue;
+  border-color: #0000ff;
   background-color: lightblue;
 }
 .mw-ical-calendar .Curriculum {
-  border-color: green;
+  border-color: #008000;
   background-color: lightgreen;
 }
 .mw-ical-calendar .Lectures {
-  border-color: yellow;
+  border-color: #ffff00;
   background-color: #ffffdc;
 }
 </style>
