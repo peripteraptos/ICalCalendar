@@ -31,15 +31,14 @@
     "ICalCalendar": "MediaWiki\\Extension\\ICalCalendar\\SpecialCalendar"
   },
   "ResourceFileModulePaths": {
-    "localBasePath": "resources",
+    "localBasePath": "src",
     "remoteExtPath": "ICalCalendar/resources"
   },
   "ResourceModules": {
     "ext.ICalCalendar": {
-      "dependencies": ["vue", "mediawiki.api"],
       "es6": true,
-      "packageFiles": ["calendar.umd.js"],
-      "styles": ["style.css"]
+      "dependencies": ["vue", "mediawiki.api"],
+      "packageFiles": ["init.js", "Calendar.vue"]
     }
   },
   "APIListModules": {

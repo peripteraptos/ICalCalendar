@@ -282,7 +282,7 @@ const API_URL =
       "/api.php?action=query&format=json&prop=&list=calendar"
     : "../calendar.json";
 
-export default {
+module.exports = exports = {
   data() {
     return {
       currentMonth: startOfMonth(new Date()),
@@ -352,7 +352,6 @@ export default {
           let endDate = isLastDay
             ? c.endDate
             : endOfDay(addDays(c.startDate, i));
-          console.log(startDate, endDate);
           dates.push({
             ...c,
             startDate,
@@ -368,7 +367,6 @@ export default {
   },
   methods: {
     toggleCalendar(calendar) {
-      console.log(calendar);
       this.hiddenCalendar = this.hiddenCalendar.includes(calendar)
         ? this.hiddenCalendar.filter(c => c !== calendar)
         : [...this.hiddenCalendar, calendar];
@@ -438,306 +436,259 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.mw-ical-calendar {
-  $border-color: #a2a9b1;
-  @keyframes rcfiltersBouncedelay {
-    0%,
-    50%,
-    100% {
-      transform: scale(0.625);
-    }
-
-    20% {
-      opacity: 0.87;
-      transform: scale(1);
-    }
+<style>
+@keyframes rcfiltersBouncedelay {
+  0%,
+  50%,
+  100% {
+    transform: scale(0.625);
   }
-  .cal-loading-spinner {
-    /* display:none; */
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    margin-left: -18px;
-    white-space: nowrap;
-
-    .cal-loading-spinner-bounce,
-    &:before,
-    &:after {
-      content: "";
-      background-color: #3366cc;
-      display: block;
-      float: left;
-      width: 12px;
-      height: 12px;
-      border-radius: 100%;
-      -webkit-animation: rcfiltersBouncedelay 1600ms ease-in-out -160ms infinite
-        both;
-      animation: rcfiltersBouncedelay 1600ms ease-in-out -160ms infinite both;
-    }
-
-    &:before {
-      margin-right: 4px;
-      -webkit-animation-delay: -330ms;
-      animation-delay: -330ms;
-    }
-
-    &:after {
-      margin-left: 4px;
-      -webkit-animation-delay: 0s;
-      animation-delay: 0s;
-    }
+  20% {
+    opacity: 0.87;
+    transform: scale(1);
   }
-
-  .days,
-  .week-days {
+}
+.mw-ical-calendar .cal-loading-spinner {
+  /* display:none;
+	 */
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  margin-left: -18px;
+  white-space: nowrap;
+}
+.mw-ical-calendar .cal-loading-spinner .cal-loading-spinner-bounce,
+.mw-ical-calendar .cal-loading-spinner:before,
+.mw-ical-calendar .cal-loading-spinner:after {
+  content: "";
+  background-color: #36c;
+  display: block;
+  float: left;
+  width: 12px;
+  height: 12px;
+  border-radius: 100%;
+  -webkit-animation: rcfiltersBouncedelay 1600ms ease-in-out -160ms infinite both;
+  animation: rcfiltersBouncedelay 1600ms ease-in-out -160ms infinite both;
+}
+.mw-ical-calendar .cal-loading-spinner:before {
+  margin-right: 4px;
+  -webkit-animation-delay: -330ms;
+  animation-delay: -330ms;
+}
+.mw-ical-calendar .cal-loading-spinner:after {
+  margin-left: 4px;
+  -webkit-animation-delay: 0s;
+  animation-delay: 0s;
+}
+.mw-ical-calendar .days,
+.mw-ical-calendar .week-days {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mw-ical-calendar .week-days {
+  display: none;
+}
+.mw-ical-calendar .week-days p,
+.mw-ical-calendar .days .dayN {
+  padding: 0.5rem 1rem;
+  margin: 0;
+  font-weight: bold;
+}
+.mw-ical-calendar .week-days p .short,
+.mw-ical-calendar .days .dayN .short {
+  display: none;
+}
+.mw-ical-calendar .week-days {
+  background: #f8f9fa;
+  border: 1px solid #a2a9b1;
+  border-top: 0;
+  color: black;
+}
+.mw-ical-calendar .days {
+  background: #f8f9fa;
+  border: 1px solid #a2a9b1;
+  border-top: 0;
+  border-radius: 0 0 3px 3px;
+}
+.mw-ical-calendar .day {
+  background: white;
+}
+.mw-ical-calendar .header {
+  border: 1px solid #a2a9b1;
+  border-radius: 3px 3px 0 0;
+  flex-wrap: wrap;
+  gap: 1em 3em;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.75rem 1rem;
+  background: #f8f9fa;
+  color: black;
+}
+.mw-ical-calendar .header .calnav button {
+  background: white;
+  margin-right: 5px;
+}
+.mw-ical-calendar .header .types {
+  gap: 0.5em;
+  display: flex;
+  flex-wrap: wrap;
+}
+.mw-ical-calendar .header input.search {
+  flex-grow: 1;
+}
+.mw-ical-calendar .header button,
+.mw-ical-calendar .header input {
+  box-shadow: none;
+  border: 1px solid #a2a9b1;
+  border-radius: 3px;
+  color: black;
+  padding: 0.25rem 0.5rem;
+}
+.mw-ical-calendar .header button {
+  cursor: pointer;
+}
+.mw-ical-calendar .header .current {
+  margin-left: 1rem;
+  font-size: 1.25rem;
+  vertical-align: middle;
+}
+.mw-ical-calendar .event + .event {
+  margin-top: 2px;
+}
+.mw-ical-calendar .event {
+  background-color: lightblue;
+  padding: 3px;
+  border-left: 5px solid #00a;
+  padding-left: 0.75em;
+  line-height: 1.4;
+  font-size: 0.9em;
+  word-break: break-word;
+  position: relative;
+  color: black;
+}
+.mw-ical-calendar .event .time {
+  font-weight: bold;
+}
+.mw-ical-calendar .event .time .end {
+  font-size: 90%;
+  font-weight: normal;
+}
+.mw-ical-calendar .event .description {
+  margin-top: 0.25rem;
+  font-size: 90%;
+}
+.mw-ical-calendar .event .description .title {
+  font-weight: bold;
+  font-size: 110%;
+  display: none;
+}
+.mw-ical-calendar .event .description .time {
+  display: none;
+  font-size: 90%;
+}
+.mw-ical-calendar .event .description p {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 0.5rem;
+  white-space: pre-wrap;
+}
+.mw-ical-calendar .event .description div {
+  white-space: pre-wrap;
+}
+.mw-ical-calendar .event.hasDescription {
+  cursor: help;
+}
+.mw-ical-calendar .event.hasDescription:hover .description {
+  display: block;
+}
+.mw-ical-calendar .day:nth-of-type(-n + 7) .event .description {
+  top: 1rem;
+  bottom: auto;
+}
+.mw-ical-calendar .calendar {
+  display: flex;
+  flex-direction: column;
+}
+.mw-ical-calendar .noEvents {
+  text-align: center;
+  padding: 3rem 2rem;
+  font-size: 1.25rem;
+}
+@media screen and (min-width: 1024px) {
+  .mw-ical-calendar .days,
+  .mw-ical-calendar .week-days {
+    grid-gap: 1px;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+  .mw-ical-calendar .week-days {
     display: grid;
-
-    grid-template-columns: minmax(0, 1fr);
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
-  .week-days {
+  .mw-ical-calendar .days .day {
+    box-shadow: 0 0 0 1px #d9d9d9;
+  }
+  .mw-ical-calendar .days .dayN .short {
+    display: block;
+  }
+  .mw-ical-calendar .days .dayN .long {
     display: none;
   }
-
-  .week-days p,
-  .days .dayN {
-    padding: 0.5rem 1rem;
-    margin: 0;
-    font-weight: bold;
-    .short {
-      display: none;
-    }
-  }
-  .week-days {
-    background: #f8f9fa;
-    border: 1px solid #a2a9b1;
-    border-top: 0;
-    color: black;
-  }
-  .days {
-    background: #f8f9fa;
-    border: 1px solid #a2a9b1;
-    border-top: 0;
-    border-radius: 0 0 3px 3px;
-    //height: 80%;
-  }
-
-  .day {
+  .mw-ical-calendar .event .description {
+    bottom: 1rem;
+    display: none;
+    position: absolute;
+    z-index: 1;
     background: white;
+    padding: 1rem;
+    border: 1px solid black;
   }
-
-  .header {
-    border: 1px solid #a2a9b1;
-    border-radius: 3px 3px 0 0;
-    flex-wrap: wrap;
-    gap: 1em 3em;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 0.75rem 1rem;
-    background: #f8f9fa;
-    color: black;
-    .calnav {
-      button {
-        background: white;
-        margin-right: 5px;
-      }
-    }
-
-    .types {
-      gap: 0.5em;
-      display: flex;
-      flex-wrap: wrap;
-    }
-
-    input.search {
-      flex-grow: 1;
-      //width: 100%;
-      //max-width: 400px;
-      //margin: 0 2em;
-    }
-
-    button,
-    input {
-      box-shadow: none;
-      border: 1px solid #a2a9b1;
-      border-radius: 3px;
-      color: black;
-      padding: 0.25rem 0.5rem;
-      //margin-right: 5px;
-    }
-    button {
-      cursor: pointer;
-    }
-    .current {
-      margin-left: 1rem;
-      font-size: 1.25rem;
-      vertical-align: middle;
-    }
+  .mw-ical-calendar .event .description .time,
+  .mw-ical-calendar .event .description .title {
+    display: block;
   }
-  .event + .event {
-    margin-top: 2px;
+  .mw-ical-calendar .event .description a {
+    display: inline-block;
+    white-space: nowrap;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1;
+    vertical-align: text-bottom;
   }
-  .event {
-    background-color: lightblue;
-    padding: 3px;
-    border-left: 5px solid #0000aa;
-    padding-left: 0.75em;
-    line-height: 1.4;
-    font-size: 0.9em;
-    word-break: break-word;
-    //border-radius: 5px;
-    position: relative;
-    color: black;
-    .time {
-      //margin-bottom: 0.25em;
-      font-weight: bold;
-      .end {
-        font-size: 90%;
-        font-weight: normal;
-      }
-    }
-    .description {
-      margin-top: 0.25rem;
-      font-size: 90%;
-      .title {
-        font-weight: bold;
-        font-size: 110%;
-        display: none;
-      }
-      .time {
-        display: none;
-        font-size: 90%;
-      }
-      p {
-        padding: 0;
-        margin: 0;
-        margin-bottom: 0.5rem;
-        white-space: pre-wrap;
-      }
-      div {
-        white-space: pre-wrap;
-      }
-    }
-    &.hasDescription {
-      cursor: help;
-    }
-    &.hasDescription:hover .description {
-      display: block;
-    }
+  .mw-ical-calendar .noEvents {
+    display: none;
   }
-  .day:nth-of-type(-n + 7) .event .description {
-    //background-color: blue !important;
-    top: 1rem;
-    bottom: auto;
+}
+.mw-ical-calendar .has-low-opacity {
+  opacity: 0.25;
+}
+@media screen and (max-width: 1024px) {
+  .mw-ical-calendar .day {
+    grid-column-start: unset !important;
   }
-  .calendar {
-    display: flex;
-    flex-direction: column;
-    > .days {
-      //flex-grow: 1;
-    }
+  .mw-ical-calendar .day:not(.hasDates) {
+    display: none;
   }
-
-  .noEvents {
-    text-align: center;
-    padding: 3rem 2rem;
-    font-size: 1.25rem;
+  .mw-ical-calendar .event .description {
+    position: ab;
   }
-
-  @media screen and (min-width: 1024px) {
-    .days,
-    .week-days {
-      grid-gap: 1px;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-    }
-    .week-days {
-      display: grid;
-    }
-
-    .days {
-      .day {
-        box-shadow: 0 0 0 1px #d9d9d9;
-      }
-      .dayN {
-        .short {
-          display: block;
-        }
-        .long {
-          display: none;
-        }
-      }
-    }
-
-    .event {
-      .description {
-        .time,
-        .title {
-          display: block;
-        }
-        bottom: 1rem;
-        display: none;
-        position: absolute;
-        z-index: 1;
-        background: white;
-        padding: 1rem;
-        border: 1px solid black;
-
-        a {
-          display: inline-block;
-          white-space: nowrap;
-          max-width: min(300px, 90vw);
-          overflow: hidden;
-          text-overflow: ellipsis;
-          line-height: 1;
-          vertical-align: text-bottom;
-        }
-      }
-    }
-    .noEvents {
-      display: none;
-    }
-  }
-
-  .has-low-opacity {
-    opacity: 0.25;
-  }
-
-  @media screen and (max-width: 1024px) {
-    .day {
-      grid-column-start: unset !important;
-    }
-    .day:not(.hasDates) {
-      display: none;
-    }
-
-    .event {
-      .description {
-        position: ab;
-      }
-    }
-  }
-
-  .Room_schedule {
-    border-color: orange;
-    background-color: lightyellow;
-  }
-
-  .Key_dates {
-    border-color: blue;
-    background-color: lightblue;
-  }
-
-  .Curriculum {
-    border-color: green;
-    background-color: lightgreen;
-  }
-
-  .Lectures {
-    border-color: yellow;
-    background-color: rgb(255, 255, 220);
-  }
+}
+.mw-ical-calendar .Room_schedule {
+  border-color: orange;
+  background-color: lightyellow;
+}
+.mw-ical-calendar .Key_dates {
+  border-color: blue;
+  background-color: lightblue;
+}
+.mw-ical-calendar .Curriculum {
+  border-color: green;
+  background-color: lightgreen;
+}
+.mw-ical-calendar .Lectures {
+  border-color: yellow;
+  background-color: #ffffdc;
 }
 </style>

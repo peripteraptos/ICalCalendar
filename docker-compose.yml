@@ -1,0 +1,9 @@
+services:
+  mediawiki:
+    image: mediawiki:1.42
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www/html/extensions/ICalCalendar
+      - ./docker:/docker
+    command: ["/bin/sh", "/docker/run.sh"]

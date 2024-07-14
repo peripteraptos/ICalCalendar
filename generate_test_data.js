@@ -1,4 +1,6 @@
 const { faker } = require("@faker-js/faker");
+const fs = require("node:fs");
+const path = require("node:path");
 
 // Function to generate a random date within 5 months around the current date
 function getRandomDateAroundCurrent() {
@@ -37,4 +39,13 @@ function generateEvents(count) {
   return Array.from({ length: count }, (_, i) => generateEvent(i + 1));
 }
 
-console.log(JSON.stringify({ calendar: generateEvents(500) }));
+try {
+  fs.writeFileSync(
+    path.resolve(__dirname, "calendar.json"),
+    JSON.stringify({ calendar: generateEvents(500) })
+  );
+  // file written successfully
+  console.log("Generated dates written to calendar.json written!");
+} catch (err) {
+  console.error(err);
+}
