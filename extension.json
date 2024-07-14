@@ -5,10 +5,7 @@
   "license-name": "GPL-2.0-or-later",
   "type": "parserhook",
   "requires": {
-    "MediaWiki": ">= 1.29.0",
-    "extensions": {
-      "External Data": ">= 3.0"
-    }
+    "MediaWiki": ">= 1.29.0"
   },
   "load_composer_autoloader": true,
   "AutoloadNamespaces": {
