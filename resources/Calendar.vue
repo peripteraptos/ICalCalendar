@@ -532,7 +532,7 @@ module.exports = exports = {
   border: 1px solid #a2a9b1;
   border-radius: 3px 3px 0 0;
   flex-wrap: wrap;
-  gap: 1rem 3rem;
+  gap: 1rem 1rem;
   display: flex;
   align-items: center;
   justify-content: flex-start;
