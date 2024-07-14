@@ -28,7 +28,7 @@
     "ICalCalendar": "MediaWiki\\Extension\\ICalCalendar\\SpecialCalendar"
   },
   "ResourceFileModulePaths": {
-    "localBasePath": "src",
+    "localBasePath": "resources",
     "remoteExtPath": "ICalCalendar/resources"
   },
   "ResourceModules": {
