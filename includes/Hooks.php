@@ -7,10 +7,11 @@ use FormatJson;
 class Hooks implements
 	\MediaWiki\Hook\ParserFirstCallInitHook,
 	\MediaWiki\Hook\BeforePageDisplayHook
- {
+{
 
-	public function onBeforePageDisplay( $out, $skin ): void {
-		$out->addModules( ['ext.ICalCalendar'] );
+	public function onBeforePageDisplay($out, $skin): void
+	{
+		$out->addModules(['ext.ICalCalendar']);
 	}
 
 
@@ -22,7 +23,8 @@ class Hooks implements
 	 * @param Parser $parser
 	 * @throws \MWException
 	 */
-	public function onParserFirstCallInit( $parser ) {
+	public function onParserFirstCallInit($parser)
+	{
 		// Add the following to a wiki page to see how it works:
 		// <dump>test</dump>
 		// <dump foo="bar" baz="quux">test content</dump>
@@ -34,11 +36,12 @@ class Hooks implements
 
 		// Add the following to a wiki page to see how it works:
 		// {{#showme: hello | hi | there }}
-		$parser->setFunctionHook( 'calendar', [ self::class, 'parserFunctionShowCalendar' ] );
+		$parser->setFunctionHook('calendar', [self::class, 'parserFunctionShowCalendar']);
 	}
 
 
-	public static function onScribuntoExternalLibraries( $engine, &$extraLibraries ) {
+	public static function onScribuntoExternalLibraries($engine, &$extraLibraries)
+	{
 		$extraLibraries['mw.ext.calendar'] = CalendarLua::class;
 	}
 
@@ -50,14 +53,15 @@ class Hooks implements
 	 * @param string ...$args
 	 * @return string HTML to insert in the page.
 	 */
-	public static function parserFunctionShowCalendar( Parser $parser, string $value, ...$args ) {
+	public static function parserFunctionShowCalendar(Parser $parser, string $value, ...$args)
+	{
 
 		$events = [];
-		foreach(self::getCalendars() as $name => $calendar){
-			$cal = new Calendar($calendar["url"],$name);
+		foreach (self::getCalendars() as $name => $calendar) {
+			$cal = new Calendar($calendar["url"], $name);
 			$events = [...$events, $cal->getMappedEvents()];
 		}
-		
+
 		$showme = [
 			'value' => $value,
 			'arguments' => $args,
@@ -74,7 +78,8 @@ class Hooks implements
 	 *
 	 * @return string Wikitext to be rendered in the page.
 	 */
-	public static function getCalendars() {
+	public static function getCalendars()
+	{
 		global $wgCalendarSources;
 		return $wgCalendarSources;
 	}
