@@ -1,7 +1,18 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import commonjs from "vite-plugin-commonjs";
+import replace from "vite-plugin-filter-replace";
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [commonjs(), vue()]
+  plugins: [
+    replace([
+      {
+        filter: /\.vue$/,
+        replace: {
+          from: /module.exports = exports =/g,
+          to: "export default"
+        }
+      }
+    ]),
+    vue()
+  ]
 });
