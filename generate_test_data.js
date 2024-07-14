@@ -1,6 +1,13 @@
 const { faker } = require("@faker-js/faker");
 const fs = require("node:fs");
 const path = require("node:path");
+const categories = {
+  "Room schedule": "#ffa500",
+  "Key dates": "#0000ff",
+  Curriculum: "#008000",
+  Lectures: "#ffff00",
+  Rundgang: "#ff00ff"
+};
 
 // Function to generate a random date within 5 months around the current date
 function getRandomDateAroundCurrent() {
@@ -20,12 +27,7 @@ function generateEvent(id) {
 
   return {
     id: String(id),
-    type: faker.helpers.arrayElement([
-      "Room schedule",
-      "Curriculum",
-      "Reminder",
-      "Event"
-    ]),
+    type: faker.helpers.arrayElement(Object.keys(categories)),
     title: faker.company.catchPhrase(),
     location: faker.location.city(),
     description: faker.lorem.sentences(5),
@@ -42,7 +44,7 @@ function generateEvents(count) {
 try {
   fs.writeFileSync(
     path.resolve(__dirname, "calendar.json"),
-    JSON.stringify({ calendar: generateEvents(500) })
+    JSON.stringify({ calendar: generateEvents(500), categories })
   );
   // file written successfully
   console.log("Generated dates written to calendar.json written!");
