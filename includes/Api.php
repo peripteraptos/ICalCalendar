@@ -2,20 +2,19 @@
 
 namespace MediaWiki\Extension\ICalCalendar;
 
-use ApiBase;
 use ApiQueryBase;
-use MediaWiki\MediaWikiServices;
-use \DeferredUpdates;
+use MediaWiki\Deferred\DeferredUpdates;
 
-
-class Api extends ApiQueryBase {
+class Api extends ApiQueryBase
+{
 
 	/**
 	 * @param \ApiQuery $query
 	 * @param string $moduleName
 	 */
-	public function __construct( $query, $moduleName ) {
-		parent::__construct( $query, $moduleName, 'calendar' );
+	public function __construct($query, $moduleName)
+	{
+		parent::__construct($query, $moduleName, 'calendar');
 	}
 
 	/**
@@ -23,16 +22,23 @@ class Api extends ApiQueryBase {
 	 * of wgExampleFooStuff. In a more realistic example, this
 	 * method would probably
 	 */
-	public function execute() {
+	public function execute()
+	{
 		$store = new CalendarStore();
-		if($store->cacheOutdated()){
-			DeferredUpdates::addCallableUpdate(function() use ($store){$store->fetch();},DeferredUpdates::POSTSEND);
+		if ($store->cacheOutdated()) {
+			DeferredUpdates::addCallableUpdate(function () use ($store) {
+				$store->fetch();
+			});
 		}
-		
-		$this->getResult()->addValue( null, $this->getModuleName(), $store->getEvents());
+
+		$this->getResult()->addValue(null, $this->getModuleName(), $store->getEvents());
+		$this->getResult()->addValue(null, 'expiresIn', time() - $store->cacheValidUntil());
+		$this->getResult()->addValue(null, 'categories', $store->getCategories());
+
 	}
 
-    public function getCacheMode( $params ) {
-        return 'public';
-    }
+	public function getCacheMode($params)
+	{
+		return 'public';
+	}
 }
