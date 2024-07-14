@@ -7,16 +7,18 @@
 
 namespace MediaWiki\Extension\ICalCalendar;
 
-class SpecialCalendar extends \SpecialPage {
+class SpecialCalendar extends \SpecialPage
+{
 
 	/**
 	 * Initialize the special page.
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		// A special page should at least have a name.
 		// We do this by calling the parent class (the SpecialPage class)
 		// constructor method with the name as first and only parameter.
-		parent::__construct( 'ICalCalendar' );
+		parent::__construct('ICalCalendar');
 	}
 
 	/**
@@ -24,21 +26,17 @@ class SpecialCalendar extends \SpecialPage {
 	 * @param string $sub The subpage string argument (if any).
 	 *  [[Special:HelloWorld/subpage]].
 	 */
-	public function execute( $sub ) {
-        $out = $this->getOutput();
-        $markup = <<<EOM
-        <div id="vue-root">
-            <p>This message will disappear once Vue.js initializes.</p>
-        </div>
-EOM;
-
-		$out->setPageTitle( $this->msg( 'vuetest' ) );
-		$out->addSubtitle( $this->msg( 'vuetest-summary' ) );
-        $out->addHTML( $markup );
-        $out->addModules( 'ext.ICalCalendar' );
+	public function execute($sub)
+	{
+		$out = $this->getOutput();
+		$markup = '<div id="ical-calendar-root"></div>';
+		$out->setPageTitle("ICalCalendar");
+		$out->addHTML($markup);
+		$out->addModules('ext.ICalCalendar');
 	}
 
-	protected function getGroupName() {
+	protected function getGroupName()
+	{
 		return 'other';
 	}
 }

@@ -25,5 +25,5 @@
     App = require("./Calendar.vue");
   // Create the Vue instance
   // eslint-disable-next-line no-new
-  Vue.createMwApp(App).mount("#vue-root");
+  Vue.createMwApp(App).mount("#ical-calendar-root");
 })();
