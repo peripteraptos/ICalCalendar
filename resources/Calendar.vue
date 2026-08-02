@@ -25,7 +25,7 @@
             :key="calendar"
             @click="toggleCalendar(calendar)"
             :style="{
-              backgroundColor: this.categories[calendar] + '3f'
+              backgroundColor: this.categories[calendar] + '3f',
             }"
             :class="{ 'has-low-opacity': hiddenCalendar.includes(calendar) }"
           >
@@ -48,7 +48,7 @@
           :class="{ hasDates: events.length > 0 }"
           :style="{
             color: isToday(day) ? 'red' : 'black',
-            'grid-column-start': index === 0 ? weekdayOffset : '0' // basically first-child with a param
+            'grid-column-start': index === 0 ? weekdayOffset : '0', // basically first-child with a param
           }"
         >
           <div class="dayN">
@@ -65,7 +65,7 @@
                 title,
                 isMultiDay,
                 isFirstDay,
-                isLastDay
+                isLastDay,
               },
               index
             ) in events"
@@ -73,7 +73,7 @@
             class="event"
             :style="{
               borderColor: this.categories[type],
-              backgroundColor: this.categories[type] + '1f'
+              backgroundColor: this.categories[type] + '1f',
             }"
             :class="[{ hasDescription: !!description }]"
           >
@@ -146,7 +146,7 @@ const monthNames = [
   "September",
   "October",
   "November",
-  "December"
+  "December",
 ];
 
 const dayNames = [
@@ -156,7 +156,7 @@ const dayNames = [
   "Wednesday",
   "Thursday",
   "Friday",
-  "Saturday"
+  "Saturday",
 ];
 
 function format(date, formatStr) {
@@ -172,12 +172,12 @@ function format(date, formatStr) {
     yy: String(d.getFullYear()).substr(2),
     HH: String(d.getHours()).padStart(2, "0"),
     mm: String(d.getMinutes()).padStart(2, "0"),
-    ss: String(d.getSeconds()).padStart(2, "0")
+    ss: String(d.getSeconds()).padStart(2, "0"),
   };
 
   return formatStr.replace(
     /MMMM|yyyy|dd|EEEE|MMM|MM|yy|HH|mm|ss/g,
-    match => map[match]
+    (match) => map[match],
   );
 }
 
@@ -296,9 +296,9 @@ module.exports = exports = {
       validUntil: null,
       loading: false,
       searchQuery: decodeURI(
-        new URL(location.href).hash.substr(1).replaceAll("_", " ")
+        new URL(location.href).hash.substr(1).replaceAll("_", " "),
       ),
-      hiddenCalendar: []
+      hiddenCalendar: [],
     };
   },
   directives: {},
@@ -313,15 +313,15 @@ module.exports = exports = {
     daysOfCurrentMonth() {
       return eachDayOfInterval({
         start: this.currentMonth,
-        end: sub(this.nextMonth, { days: 1 })
-      }).map(day => ({
+        end: sub(this.nextMonth, { days: 1 }),
+      }).map((day) => ({
         day,
-        events: this.filteredDates.filter(e => isSameDay(e.startDate, day))
+        events: this.filteredDates.filter((e) => isSameDay(e.startDate, day)),
       }));
     },
     weekNames() {
       return [...Array(7)].map((_, index) =>
-        format(addDays(this.firstDayOfWeek, index), "EEEE")
+        format(addDays(this.firstDayOfWeek, index), "EEEE"),
       );
     },
     weekdayOffset() {
@@ -329,17 +329,17 @@ module.exports = exports = {
     },
     currentMonthHasEvent() {
       return (
-        this.daysOfCurrentMonth.filter(d => d.events.length > 0).length > 0
+        this.daysOfCurrentMonth.filter((d) => d.events.length > 0).length > 0
       );
     },
     calendars() {
-      return [...new Set(this.dates.map(d => d.type))];
+      return [...new Set(this.dates.map((d) => d.type))];
     },
     filteredDates() {
       return this.spreadMultidayDates
-        .filter(e => !this.hiddenCalendar.includes(e.type))
-        .filter(e =>
-          e.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+        .filter((e) => !this.hiddenCalendar.includes(e.type))
+        .filter((e) =>
+          e.title.toLowerCase().includes(this.searchQuery.toLowerCase()),
         )
         .slice()
         .sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
@@ -350,9 +350,9 @@ module.exports = exports = {
         const isMultiDay = daydiff !== 0;
         if (!isMultiDay) return [...p, { ...c, isMultiDay }];
         let dates = [];
-        for (let i = 0; i < daydiff; i++) {
+        for (let i = 0; i <= daydiff; i++) {
           let isFirstDay = i == 0;
-          let isLastDay = i == daydiff - 1;
+          let isLastDay = i == daydiff;
           let startDate = isFirstDay
             ? c.startDate
             : startOfDay(addDays(c.startDate, i));
@@ -365,17 +365,17 @@ module.exports = exports = {
             endDate,
             isMultiDay,
             isFirstDay,
-            isLastDay
+            isLastDay,
           });
         }
         return [...p, ...dates];
       }, []);
-    }
+    },
   },
   methods: {
     toggleCalendar(calendar) {
       this.hiddenCalendar = this.hiddenCalendar.includes(calendar)
-        ? this.hiddenCalendar.filter(c => c !== calendar)
+        ? this.hiddenCalendar.filter((c) => c !== calendar)
         : [...this.hiddenCalendar, calendar];
     },
     format,
@@ -393,12 +393,12 @@ module.exports = exports = {
     fetchDates() {
       this.loading = true;
       fetch(API_URL)
-        .then(res => res.json())
-        .then(d => {
-          this.dates = d.calendar.map(d => ({
+        .then((res) => res.json())
+        .then((d) => {
+          this.dates = d.calendar.map((d) => ({
             ...d,
             startDate: parseJSON(d.startDate),
-            endDate: parseJSON(d.endDate)
+            endDate: parseJSON(d.endDate),
           }));
           this.validUntil = d.validUntil;
           this.categories = d.categories;
@@ -429,16 +429,16 @@ module.exports = exports = {
         "<": " ",
         ">": " ",
         '"': "&quot;",
-        "'": "&#x27;"
+        "'": "&#x27;",
         //"/": "&#x2F;"
       };
       const reg = /[&<>"']/gi;
-      return string.replace(reg, match => map[match]);
-    }
+      return string.replace(reg, (match) => map[match]);
+    },
   },
   mounted() {
     this.fetchDates();
-  }
+  },
 };
 </script>
 
@@ -480,7 +480,8 @@ module.exports = exports = {
   width: 12px;
   height: 12px;
   border-radius: 100%;
-  -webkit-animation: rcfiltersBouncedelay 1600ms ease-in-out -160ms infinite both;
+  -webkit-animation: rcfiltersBouncedelay 1600ms ease-in-out -160ms infinite
+    both;
   animation: rcfiltersBouncedelay 1600ms ease-in-out -160ms infinite both;
 }
 .mw-ical-calendar .cal-loading-spinner:before {
