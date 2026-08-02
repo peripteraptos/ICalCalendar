@@ -1,6 +1,6 @@
 services:
   mediawiki:
-    image: mediawiki:1.42
+    image: mediawiki:1.46
     ports:
       - 80:80
     volumes:
