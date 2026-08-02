@@ -44,10 +44,7 @@ class Calendar
 	public function getMappedEvents()
 	{
 		return array_map(function (Event $event) {
-			print_r($event);
-			print_r(array_keys(get_object_vars($event)));
-			print_r(property_exists($event, 'rrule') ? "Recurring" : "Not Recurring");
-			print_r("\n");
+
 			return [
 				'id' => $event->uid,
 				'type' => $this->name,
