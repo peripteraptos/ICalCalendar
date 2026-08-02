@@ -9,6 +9,7 @@ use \DateTime;
 class Calendar
 {
 
+	public const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome Safari/537.36';
 	public ?ICal $ical;
 	public string $name;
 	public string $url;
@@ -27,7 +28,12 @@ class Calendar
 			'skipRecurrence'              => false, // Default value
 		));
 		if ($ical === null) {
-			$this->ical->initUrl($url, null, null, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:53.0) Gecko/20100101 Firefox/53.0');
+			try {
+				$this->ical->initUrl($url, null, null, self::USER_AGENT);
+			} catch (\Exception $e) {
+				throw new \Exception("Failed to fetch calendar from URL: " . $e->getMessage());
+			}
+			// $this->ical->initUrl($url, null, null, self::USER_AGENT); // Already called in try block
 		}
 	}
 
