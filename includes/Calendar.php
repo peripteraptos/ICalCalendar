@@ -33,7 +33,6 @@ class Calendar
 			} catch (\Exception $e) {
 				throw new \Exception("Failed to fetch calendar from URL: " . $e->getMessage());
 			}
-			// $this->ical->initUrl($url, null, null, self::USER_AGENT); // Already called in try block
 		}
 	}
 

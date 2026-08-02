@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\ICalCalendar;
 
-use ApiQueryBase;
+use MediaWiki\Api\ApiQueryBase;
 use MediaWiki\Deferred\DeferredUpdates;
 
 class Api extends ApiQueryBase
@@ -34,7 +34,6 @@ class Api extends ApiQueryBase
 		$this->getResult()->addValue(null, $this->getModuleName(), $store->getEvents());
 		$this->getResult()->addValue(null, 'expiresIn', time() - $store->cacheValidUntil());
 		$this->getResult()->addValue(null, 'categories', $store->getCategories());
-
 	}
 
 	public function getCacheMode($params)

@@ -1,4 +1,5 @@
 <?php
+
 namespace MediaWiki\Extension\ICalCalendar;
 
 class CalendarStore
@@ -36,8 +37,14 @@ class CalendarStore
         global $wgCalendarSources;
         $this->events = [];
         foreach ($wgCalendarSources as $name => $calendar) {
-            $cal = $this->createCalendar($calendar["url"], $name);
-            array_push($this->events, ...$cal->getMappedEvents());
+            try {
+                $cal = $this->createCalendar($calendar["url"], $name);
+                $this->events = array_merge($this->events, $cal->getMappedEvents());
+            } catch (\Exception $e) {
+                // Log the error and continue with the next calendar
+                error_log("Failed to fetch calendar '$name' from URL '{$calendar['url']}': " . $e->getMessage());
+                continue;
+            }
         }
 
         $this->saveCache();
@@ -72,5 +79,4 @@ class CalendarStore
     {
         return file_exists($this->getCacheFilePath());
     }
-
 }
