@@ -14,5 +14,8 @@ export default defineConfig({
       }
     ]),
     vue()
-  ]
+  ],
+  test: {
+    environment: "jsdom"
+  }
 });

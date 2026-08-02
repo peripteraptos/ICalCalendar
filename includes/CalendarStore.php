@@ -36,11 +36,16 @@ class CalendarStore
         global $wgCalendarSources;
         $this->events = [];
         foreach ($wgCalendarSources as $name => $calendar) {
-            $cal = new Calendar($calendar["url"], $name);
+            $cal = $this->createCalendar($calendar["url"], $name);
             array_push($this->events, ...$cal->getMappedEvents());
         }
 
         $this->saveCache();
+    }
+
+    protected function createCalendar($url, $name): Calendar
+    {
+        return new Calendar($url, $name);
     }
 
     public function saveCache()

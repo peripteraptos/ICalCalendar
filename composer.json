@@ -1,11 +1,27 @@
 {
   "name": "peripteraptos/icalcalendar",
   "require": {
-    "johngrogg/ics-parser": "^3.1"
+    "johngrogg/ics-parser": "^3.5"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^13.2"
   },
   "authors": [
     {
       "name": "Benedikt Ackermann"
     }
-  ]
+  ],
+  "autoload": {
+    "psr-4": {
+      "MediaWiki\\Extension\\ICalCalendar\\": "includes/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MediaWiki\\Extension\\ICalCalendar\\Tests\\": "tests/phpunit/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
+  }
 }
